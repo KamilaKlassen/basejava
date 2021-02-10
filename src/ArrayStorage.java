@@ -38,10 +38,10 @@ public class ArrayStorage {
                     storage[j - 1] = storage[j];
                 }
                 storage[actualSize - 1] = null;
+                actualSize--;
                 break;
             }
         }
-        actualSize--;
     }
 
     Resume[] getAll() {
