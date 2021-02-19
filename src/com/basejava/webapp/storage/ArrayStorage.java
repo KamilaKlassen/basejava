@@ -8,18 +8,18 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
-    int actualSize = 0;
+    private Resume[] storage = new Resume[10_000];
+    private int actualSize = 0;
 
-    public void update(Resume r) {
+    public void update(Resume resume) {
         if (actualSize != 0) {
             for (int i = 0; i < actualSize; i++) {
-                if (storage[i].equals(r)) {
-                    storage[i] = r;
+                if (storage[i].equals(resume)) {
+                    storage[i] = resume;
                     return;
                 }
             }
-            System.out.println("This resume doesn't exist!");
+            System.out.println("The resume " + resume.getUuid() + " does not exist!");
         } else {
             System.out.println("The storage is empty!");
         }
@@ -30,19 +30,19 @@ public class ArrayStorage {
         actualSize = 0;
     }
 
-    public void save(Resume r) {
+    public void save(Resume resume) {
         if (actualSize == storage.length) {
             System.out.println("The storage is full!");
             return;
         } else {
             for (int i = 0; i < actualSize; i++) {
-                if (storage[i].equals(r)) {
-                    System.out.println("This resume already exists!");
+                if (storage[i].equals(resume)) {
+                    System.out.println("The resume " + resume.getUuid() + " already exists!");
                     return;
                 }
             }
         }
-        storage[actualSize] = r;
+        storage[actualSize] = resume;
         actualSize++;
     }
 
@@ -53,7 +53,7 @@ public class ArrayStorage {
                 if (storage[i].getUuid().equals(uuid)) {
                     resume = storage[i];
                 } else {
-                    System.out.println("This resume doesn't exist!");
+                    System.out.println("The resume " + uuid + " does not exist!");
                 }
                 break;
             }
@@ -71,7 +71,7 @@ public class ArrayStorage {
                     storage[actualSize - 1] = null;
                     actualSize--;
                 } else {
-                    System.out.println("This resume doesn't exist!");
+                    System.out.println("The resume " + uuid + " does not exist!");
                 }
                 break;
             }
