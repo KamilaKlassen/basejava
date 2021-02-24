@@ -11,8 +11,18 @@ public class ArrayStorage {
     private Resume[] storage = new Resume[10_000];
     private int actualSize = 0;
 
+    private int findIndex(String uuid) {
+        int index = -1;
+        for (int i = 0; i < actualSize; i++) {
+            if (storage[i].getUuid().equals(uuid)) {
+                index = i;
+            }
+        }
+        return index;
+    }
+
     public void update(Resume resume) {
-        int index = findIndex(resume);
+        int index = findIndex(resume.getUuid());
         if (index >= 0) {
             storage[index] = resume;
         } else {
@@ -29,12 +39,11 @@ public class ArrayStorage {
         if (actualSize == storage.length) {
             System.out.println("The storage is full!");
             return;
-        } else {
-            int index = findIndex(resume);
-            if (index >= 0) {
-                System.out.println("The resume " + resume.getUuid() + " already exists!");
-                return;
-            }
+        }
+        int index = findIndex(resume.getUuid());
+        if (index >= 0) {
+            System.out.println("The resume " + resume.getUuid() + " already exists!");
+            return;
         }
         storage[actualSize] = resume;
         actualSize++;
@@ -68,25 +77,5 @@ public class ArrayStorage {
 
     public int size() {
         return actualSize;
-    }
-
-    public int findIndex(Resume resume) {
-        int index = -1;
-        for (int i = 0; i < actualSize; i++) {
-            if (storage[i].equals(resume)) {
-                index = i;
-            }
-        }
-        return index;
-    }
-
-    public int findIndex(String uuid) {
-        int index = -1;
-        for (int i = 0; i < actualSize; i++) {
-            if (storage[i].getUuid().equals(uuid)) {
-                index = i;
-            }
-        }
-        return index;
     }
 }
