@@ -7,13 +7,9 @@ import java.util.Arrays;
 /**
  * Array based storage for Resumes
  */
-public class ArrayStorage implements Storage {
-    private static final int STORAGE_LIMIT = 10000;
+public class ArrayStorage extends AbstractArrayStorage {
 
-    private Resume[] storage = new Resume[STORAGE_LIMIT];
-    private int actualSize = 0;
-
-    private int findIndex(String uuid) {
+    protected int getIndex(String uuid) {
         int index = -1;
         for (int i = 0; i < actualSize; i++) {
             if (storage[i].getUuid().equals(uuid)) {
@@ -24,7 +20,7 @@ public class ArrayStorage implements Storage {
     }
 
     public void update(Resume resume) {
-        int index = findIndex(resume.getUuid());
+        int index = getIndex(resume.getUuid());
         if (index >= 0) {
             storage[index] = resume;
         } else {
@@ -42,7 +38,7 @@ public class ArrayStorage implements Storage {
             System.out.println("The storage is full!");
             return;
         }
-        int index = findIndex(resume.getUuid());
+        int index = getIndex(resume.getUuid());
         if (index >= 0) {
             System.out.println("The resume " + resume.getUuid() + " already exists!");
             return;
@@ -53,7 +49,7 @@ public class ArrayStorage implements Storage {
 
     public Resume get(String uuid) {
         Resume resume = null;
-        int index = findIndex(uuid);
+        int index = getIndex(uuid);
         if (index >= 0) {
             resume = storage[index];
         } else {
@@ -63,7 +59,7 @@ public class ArrayStorage implements Storage {
     }
 
     public void delete(String uuid) {
-        int index = findIndex(uuid);
+        int index = getIndex(uuid);
         if (index >= 0) {
             storage[index] = storage[actualSize - 1];
             storage[actualSize - 1] = null;
