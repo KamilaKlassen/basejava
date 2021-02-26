@@ -47,17 +47,6 @@ public class ArrayStorage extends AbstractArrayStorage {
         actualSize++;
     }
 
-    public Resume get(String uuid) {
-        Resume resume = null;
-        int index = getIndex(uuid);
-        if (index >= 0) {
-            resume = storage[index];
-        } else {
-            System.out.println("The resume " + uuid + " does not exist!");
-        }
-        return resume;
-    }
-
     public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index >= 0) {
@@ -71,9 +60,5 @@ public class ArrayStorage extends AbstractArrayStorage {
 
     public Resume[] getAll() {
         return Arrays.copyOfRange(storage, 0, actualSize);
-    }
-
-    public int size() {
-        return actualSize;
     }
 }
