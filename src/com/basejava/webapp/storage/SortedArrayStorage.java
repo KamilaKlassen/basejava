@@ -4,7 +4,7 @@ import com.basejava.webapp.model.Resume;
 
 import java.util.Arrays;
 
-public class SortedArrayStorage extends AbstractArrayStorage{
+public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected int getIndex(String uuid) {
@@ -14,27 +14,21 @@ public class SortedArrayStorage extends AbstractArrayStorage{
     }
 
     @Override
-    public void clear() {
-
-    }
-
-    @Override
-    public void update(Resume r) {
-
-    }
-
-    @Override
-    public void save(Resume r) {
-
-    }
-
-    @Override
     public void delete(String uuid) {
-
+        int index = getIndex(uuid);
+        if (index >= 0) {
+            for(int i = index + 1; i < actualSize; i++){
+                storage[i - 1] = storage[i];
+            }
+            storage[actualSize - 1] = null;
+            actualSize--;
+        } else {
+            System.out.println("The resume " + uuid + " does not exist!");
+        }
     }
 
     @Override
-    public Resume[] getAll() {
-        return new Resume[0];
+    public void save(Resume resume) {
+
     }
 }
