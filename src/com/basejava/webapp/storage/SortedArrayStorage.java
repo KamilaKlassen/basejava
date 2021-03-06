@@ -14,21 +14,10 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index >= 0) {
-            for(int i = index + 1; i < actualSize; i++){
-                storage[i - 1] = storage[i];
-            }
-            storage[actualSize - 1] = null;
-            actualSize--;
-        } else {
-            System.out.println("The resume " + uuid + " does not exist!");
-        }
-    }
-
-    @Override
-    public void save(Resume resume) {
-
+    protected void insert(Resume resume, int index) {
+        int i = -index - 1;
+        System.arraycopy(storage, i, storage, i + 1, actualSize - i);
+        storage[i] = resume;
     }
 }
+
