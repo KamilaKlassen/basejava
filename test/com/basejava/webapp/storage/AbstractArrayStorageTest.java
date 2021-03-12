@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public abstract class AbstractArrayStorageTest {
     private Storage storage;
@@ -62,7 +63,9 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void save() throws Exception {
-
+        Resume resume = new Resume();
+        storage.save(resume);
+        assertNotNull(storage.get(resume.getUuid()));
     }
 
     @Test
