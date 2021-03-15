@@ -52,6 +52,11 @@ public abstract class AbstractArrayStorageTest {
         assertEquals(resume, storage.get(UUID_3));
     }
 
+    @Test(expected = NotExistStorageException.class)
+    public void updateNotExist() throws Exception {
+        storage.update(new Resume());
+    }
+
     @Test
     public void getAll() throws Exception {
         Resume[] array = storage.getAll();
@@ -66,12 +71,30 @@ public abstract class AbstractArrayStorageTest {
         Resume resume = new Resume();
         storage.save(resume);
         assertNotNull(storage.get(resume.getUuid()));
+        assertEquals(4, storage.size());
     }
 
-    @Test
+    @Test(expected = ExistStorageException.class)
+    public void saveExist() throws Exception {
+        storage.save(RESUME_1);
+    }
+
+    @Test(expected = StorageException.class)
+    public void saveStorageFull() throws Exception {
+        for (int i = 4; i < AbstractArrayStorage.STORAGE_LIMIT + 1; i++) {
+            try {
+                storage.save(new Resume());
+            } catch (StorageException e) {
+                Assert.fail("Overflow occurred earlier than expected");
+            }
+        }
+    }
+
+    @Test(expected = NotExistStorageException.class)
     public void delete() throws Exception {
-        storage.delete(UUID_2);
-        assertEquals(2,storage.size());
+        storage.delete(UUID_1);
+        assertEquals(2, storage.size());
+        storage.get(UUID_1);
     }
 
     @Test
@@ -84,32 +107,5 @@ public abstract class AbstractArrayStorageTest {
     @Test(expected = NotExistStorageException.class)
     public void getNotExist() throws Exception {
         storage.get("dummy");
-    }
-
-    @Test(expected = NotExistStorageException.class)
-    public void updateNotExist() throws Exception {
-        storage.update(new Resume());
-    }
-
-    @Test(expected = NotExistStorageException.class)
-    public void deleteNotExist() throws Exception {
-        storage.delete("dummy");
-    }
-
-    @Test(expected = ExistStorageException.class)
-    public void saveExist() throws Exception {
-        storage.save(RESUME_1);
-    }
-
-    @Test(expected = StorageException.class)
-    public void saveStorageFull() throws Exception {
-        try {
-            for (int i = 4; i < AbstractArrayStorage.STORAGE_LIMIT + 1; i++) {
-                storage.save(new Resume());
-            }
-            Assert.fail("Expected a StorageException");
-        } catch (StorageException e) {
-            Assert.assertEquals(e.getMessage(), "Storage overflow");
-        }
     }
 }
