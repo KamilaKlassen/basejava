@@ -8,40 +8,40 @@ public abstract class AbstractStorage implements Storage{
 
     @Override
     public void delete(String uuid) {
-        Integer index = getExistingIndex(uuid);
+        Object index = getExistingIndex(uuid);
         remove(index);
     }
 
     @Override
     public Resume get(String uuid) {
-        Integer index = getExistingIndex(uuid);
+        Object index = getExistingIndex(uuid);
         return take(index);
     }
 
     @Override
     public void update(Resume resume) {
-        Integer index = getExistingIndex(resume.getUuid());
+        Object index = getExistingIndex(resume.getUuid());
         renew(index, resume);
     }
 
     @Override
     public void save(Resume resume) {
-        Integer index = getNotExistingIndex(resume.getUuid());
+        Object index = getNotExistingIndex(resume.getUuid());
         insert(index, resume);
 
     }
 
-    private Integer getNotExistingIndex(String uuid) {
-        Integer index = getIndex(uuid);
-        if (index >= 0) {
+    private Object getNotExistingIndex(String uuid) {
+        Object index = getIndex(uuid);
+        if (isExist(index)) {
             throw new ExistStorageException(uuid);
         }
         return index;
     }
 
-    private Integer getExistingIndex(String uuid) {
-        Integer index = getIndex(uuid);
-        if (index < 0) {
+    private Object getExistingIndex(String uuid) {
+        Object index = getIndex(uuid);
+        if (!isExist(index)) {
             throw new NotExistStorageException(uuid);
         }
         return index;
@@ -56,13 +56,15 @@ public abstract class AbstractStorage implements Storage{
     @Override
     public abstract void clear();
 
-    public abstract void insert(Integer index, Resume resume);
+    public abstract boolean isExist(Object index);
 
-    public abstract void remove(Integer index);
+    public abstract void insert(Object index, Resume resume);
 
-    public abstract void renew(Integer index, Resume resume);
+    public abstract void remove(Object index);
 
-    public abstract Resume take(Integer index);
+    public abstract void renew(Object index, Resume resume);
 
-    public abstract Integer getIndex(String uuid);
+    public abstract Resume take(Object index);
+
+    public abstract Object getIndex(String uuid);
 }
