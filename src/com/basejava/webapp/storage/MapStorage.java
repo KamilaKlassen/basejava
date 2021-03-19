@@ -25,34 +25,34 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public boolean isExist(Object index) {
-        return index != null;
+    public boolean isExist(Object searchKey) {
+        return searchKey != null;
     }
 
     @Override
-    public void insert(Object index, Resume resume) {
+    public void insert(Object searchKey, Resume resume) {
         mapStorage.put(resume.getUuid(), resume);
     }
 
     @Override
-    public void remove(Object key) {
-        mapStorage.remove((String) key);
+    public void remove(Object searchKey) {
+        mapStorage.remove((String) searchKey);
     }
 
     @Override
-    public void renew(Object key, Resume resume) {
-        mapStorage.put((String) key, resume);
+    public void renew(Object searchKey, Resume resume) {
+        mapStorage.put((String) searchKey, resume);
     }
 
     @Override
-    public Resume take(Object key) {
-        return mapStorage.get((String) key);
+    public Resume take(Object searchKey) {
+        return mapStorage.get((String) searchKey);
     }
 
     @Override
-    public Object getIndex(String key) {
+    public Object getSearchKey(String searchKey) {
         for(Map.Entry<String, Resume> entry : mapStorage.entrySet()){
-            if(entry.getKey().equals(key)){
+            if(entry.getKey().equals(searchKey)){
                 return entry.getKey();
             }
         }

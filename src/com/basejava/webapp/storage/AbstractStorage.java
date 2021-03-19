@@ -8,63 +8,56 @@ public abstract class AbstractStorage implements Storage{
 
     @Override
     public void delete(String uuid) {
-        Object index = getExistingIndex(uuid);
-        remove(index);
+        Object searchKey = getExistingSearchKey(uuid);
+        remove(searchKey);
     }
 
     @Override
     public Resume get(String uuid) {
-        Object index = getExistingIndex(uuid);
-        return take(index);
+        Object searchKey = getExistingSearchKey(uuid);
+        return take(searchKey);
     }
 
     @Override
     public void update(Resume resume) {
-        Object index = getExistingIndex(resume.getUuid());
-        renew(index, resume);
+        Object searchKey = getExistingSearchKey(resume.getUuid());
+        renew(searchKey, resume);
     }
 
     @Override
     public void save(Resume resume) {
-        Object index = getNotExistingIndex(resume.getUuid());
-        insert(index, resume);
+        Object searchKey = getNotExistingSearchKey(resume.getUuid());
+        insert(searchKey, resume);
 
     }
 
-    private Object getNotExistingIndex(String uuid) {
-        Object index = getIndex(uuid);
-        if (isExist(index)) {
+    private Object getNotExistingSearchKey(String uuid) {
+        Object searchKey = getSearchKey(uuid);
+        if (isExist(searchKey)) {
             throw new ExistStorageException(uuid);
+
         }
-        return index;
+        return searchKey;
     }
 
-    private Object getExistingIndex(String uuid) {
-        Object index = getIndex(uuid);
-        if (!isExist(index)) {
+    private Object getExistingSearchKey(String uuid) {
+        Object searchKey = getSearchKey(uuid);
+        if (!isExist(searchKey)) {
             throw new NotExistStorageException(uuid);
         }
-        return index;
+        return searchKey;
     }
 
-    @Override
-    public abstract Resume[] getAll();
+    public abstract boolean isExist(Object searchKey);
 
-    @Override
-    public abstract int size();
+    public abstract void insert(Object searchKey, Resume resume);
 
-    @Override
-    public abstract void clear();
+    public abstract void remove(Object searchKey);
 
-    public abstract boolean isExist(Object index);
+    public abstract void renew(Object searchKey, Resume resume);
 
-    public abstract void insert(Object index, Resume resume);
+    public abstract Resume take(Object searchKey);
 
-    public abstract void remove(Object index);
-
-    public abstract void renew(Object index, Resume resume);
-
-    public abstract Resume take(Object index);
-
-    public abstract Object getIndex(String uuid);
+    public abstract Object getSearchKey(String uuid);
 }
+
