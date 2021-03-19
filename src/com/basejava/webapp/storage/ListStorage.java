@@ -3,9 +3,10 @@ package com.basejava.webapp.storage;
 import com.basejava.webapp.model.Resume;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    protected ArrayList<Resume> resumeList = new ArrayList<>();
+    protected List<Resume> resumeList = new ArrayList<>();
 
     @Override
     public void clear() {
