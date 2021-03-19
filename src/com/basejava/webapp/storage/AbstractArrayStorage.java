@@ -12,9 +12,9 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     public void remove(Object index) {
-        if (actualSize - ((Integer) index + 1) >= 0)
-            System.arraycopy(storage, (Integer) index + 1, storage, (Integer) index + 1 - 1,
-                    actualSize - ((Integer) index + 1));
+        Integer id = (Integer) index;
+        if (actualSize - (id + 1) >= 0)
+            System.arraycopy(storage, id + 1, storage, id, actualSize - (id + 1));
         storage[actualSize - 1] = null;
         actualSize--;
     }
@@ -48,6 +48,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
             throw new StorageException("Storage overflow", resume.getUuid());
         } else {
             insertElement((Integer)index, resume);
+            actualSize++;
         }
     }
 
@@ -57,7 +58,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public abstract Object getIndex(String uuid);
+    public abstract Object getSearchKey(String uuid);
 
     public abstract void insertElement(Object index, Resume resume);
 }

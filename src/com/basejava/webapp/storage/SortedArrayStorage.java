@@ -7,7 +7,7 @@ import java.util.Arrays;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public Object getIndex(String uuid) {
+    public Object getSearchKey(String uuid) {
         Resume searchKey = new Resume(uuid);
         return Arrays.binarySearch(storage, 0, actualSize, searchKey);
     }
@@ -17,7 +17,6 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         int i = -(Integer) index - 1;
         System.arraycopy(storage, i, storage, i + 1, actualSize - i);
         storage[i] = resume;
-        actualSize++;
     }
 }
 

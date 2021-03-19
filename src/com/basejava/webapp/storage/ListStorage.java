@@ -48,7 +48,7 @@ public class ListStorage extends AbstractStorage {
         return resumeList.toArray(resumes);
     }
 
-    public Object getIndex(String uuid) {
+    public Object getSearchKey(String uuid) {
         for (int i = 0; i < resumeList.size(); i++) {
             if (resumeList.get(i).getUuid().equals(uuid)) {
                 return i;
