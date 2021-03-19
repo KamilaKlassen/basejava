@@ -51,11 +51,9 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     public Object getSearchKey(String searchKey) {
-        for(Map.Entry<String, Resume> entry : mapStorage.entrySet()){
-            if(entry.getKey().equals(searchKey)){
-                return entry.getKey();
+            if(mapStorage.containsKey(searchKey)){
+                return searchKey;
             }
-        }
         return null;
     }
 }
