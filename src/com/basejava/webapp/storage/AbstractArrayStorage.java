@@ -29,15 +29,18 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return storage[(Integer) index];
     }
 
+    @Override
     public int size() {
         return actualSize;
     }
 
+    @Override
     public void clear() {
         Arrays.fill(storage, 0, actualSize, null);
         actualSize = 0;
     }
 
+    @Override
     public Resume[] getAll() {
         return Arrays.copyOf(storage, actualSize);
     }
