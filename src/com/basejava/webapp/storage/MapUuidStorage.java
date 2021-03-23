@@ -2,16 +2,16 @@ package com.basejava.webapp.storage;
 
 import com.basejava.webapp.model.Resume;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
-public class MapStorage extends AbstractStorage {
+public class MapUuidStorage extends AbstractStorage {
     protected Map<String, Resume> mapStorage = new LinkedHashMap<>();
 
     @Override
-    public Resume[] getAll() {
-        Resume[] resumes = new Resume[mapStorage.size()];
-        return mapStorage.values().toArray(resumes);
+    public List<Resume> getAllSorted() {
+        List<Resume> list = new ArrayList<>(mapStorage.values());
+        list.sort(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
+        return list;
     }
 
     @Override
