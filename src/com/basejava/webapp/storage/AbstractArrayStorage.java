@@ -4,7 +4,6 @@ import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 public abstract class AbstractArrayStorage extends AbstractStorage {
@@ -43,10 +42,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> list = Arrays.asList(Arrays.copyOfRange(storage, 0, actualSize));
-        list.sort(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
-        return list;
+    protected List<Resume> getList() {
+        return Arrays.asList(Arrays.copyOfRange(storage, 0, actualSize));
     }
 
     @Override
@@ -54,14 +51,14 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         if (actualSize == STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", resume.getUuid());
         } else {
-            insertElement((Integer)index, resume);
+            insertElement((Integer) index, resume);
             actualSize++;
         }
     }
 
     @Override
     public boolean isExist(Object index) {
-        return (Integer)index >= 0;
+        return (Integer) index >= 0;
     }
 
     @Override

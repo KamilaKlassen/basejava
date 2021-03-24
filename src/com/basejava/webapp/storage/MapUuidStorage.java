@@ -8,10 +8,8 @@ public class MapUuidStorage extends AbstractStorage {
     protected Map<String, Resume> mapStorage = new LinkedHashMap<>();
 
     @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> list = new ArrayList<>(mapStorage.values());
-        list.sort(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
-        return list;
+    protected List<Resume> getList() {
+        return new ArrayList<>(mapStorage.values());
     }
 
     @Override
