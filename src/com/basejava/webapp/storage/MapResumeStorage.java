@@ -4,7 +4,7 @@ import com.basejava.webapp.model.Resume;
 
 import java.util.*;
 
-public class MapResumeStorage extends AbstractStorage {
+public class MapResumeStorage extends AbstractStorage<Resume> {
 
     protected Map<String, Resume> mapStorage = new LinkedHashMap<>();
 
@@ -24,32 +24,32 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     @Override
-    public boolean isExist(Object searchKey) {
+    public boolean isExist(Resume searchKey) {
         return searchKey != null;
     }
 
     @Override
-    public void insert(Object searchKey, Resume resume) {
+    public void insert(Resume searchKey, Resume resume) {
         mapStorage.put(resume.getUuid(), resume);
     }
 
     @Override
-    public void remove(Object searchKey) {
-        mapStorage.remove(((Resume) searchKey).getUuid());
+    public void remove(Resume searchKey) {
+        mapStorage.remove(searchKey.getUuid());
     }
 
     @Override
-    public void renew(Object searchKey, Resume resume) {
+    public void renew(Resume searchKey, Resume resume) {
         mapStorage.put(resume.getUuid(), resume);
     }
 
     @Override
-    public Resume take(Object searchKey) {
-        return (Resume) searchKey;
+    public Resume take(Resume searchKey) {
+        return searchKey;
     }
 
     @Override
-    public Object getSearchKey(String searchKey) {
+    public Resume getSearchKey(String searchKey) {
         return mapStorage.get(searchKey);
     }
 }
