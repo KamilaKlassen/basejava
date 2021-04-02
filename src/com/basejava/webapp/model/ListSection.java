@@ -1,5 +1,6 @@
 package com.basejava.webapp.model;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,10 +32,7 @@ public class ListSection extends AbstractSection {
 
     @Override
     public String toString() {
-        for(String text: list){
-            return "• " + text;
-        }
-        return null;
+        return Arrays.toString(list.toArray()).replace("[", "").replace("]", "");
     }
 }
 
