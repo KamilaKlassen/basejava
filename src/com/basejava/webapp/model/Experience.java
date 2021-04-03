@@ -11,13 +11,11 @@ public class Experience {
     private final String title;
     private final String description;
 
-    public Experience(Link link, LocalDate fromDate, LocalDate toDate, String title, String description) {
-        Objects.requireNonNull(link,"This section cannot be null");
-        Objects.requireNonNull(fromDate,"This section cannot be null");
-        Objects.requireNonNull(toDate,"This section cannot be null");
-        Objects.requireNonNull(title,"This section cannot be null");
-        Objects.requireNonNull(description,"This section cannot be null");
-        this.link = link;
+    public Experience(String name, String url, LocalDate fromDate, LocalDate toDate, String title, String description) {
+        Objects.requireNonNull(fromDate, "FromDate cannot be null");
+        Objects.requireNonNull(toDate, "ToDate cannot be null");
+        Objects.requireNonNull(title, "Title cannot be null");
+        this.link = new Link(name, url);
         this.fromDate = fromDate;
         this.toDate = toDate;
         this.title = title;
