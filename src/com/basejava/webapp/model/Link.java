@@ -7,8 +7,7 @@ public class Link {
     private final String url;
 
     public Link(String name, String url) {
-        Objects.requireNonNull(name,"This section cannot be null");
-        Objects.requireNonNull(url,"This section cannot be null");
+        Objects.requireNonNull(name, "Name cannot be null");
         this.name = name;
         this.url = url;
     }
