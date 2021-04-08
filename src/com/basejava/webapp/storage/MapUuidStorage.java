@@ -5,7 +5,7 @@ import com.basejava.webapp.model.Resume;
 import java.util.*;
 
 public class MapUuidStorage extends AbstractStorage<String> {
-    protected Map<String, Resume> mapStorage = new LinkedHashMap<>();
+    private Map<String, Resume> mapStorage = new LinkedHashMap<>();
 
     @Override
     protected List<Resume> getList() {

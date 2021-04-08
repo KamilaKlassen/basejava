@@ -6,7 +6,7 @@ import java.util.*;
 
 public class MapResumeStorage extends AbstractStorage<Resume> {
 
-    protected Map<String, Resume> mapStorage = new LinkedHashMap<>();
+    private Map<String, Resume> mapStorage = new LinkedHashMap<>();
 
     @Override
     protected List<Resume> getList() {
