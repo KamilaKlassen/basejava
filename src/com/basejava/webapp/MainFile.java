@@ -45,10 +45,10 @@ public class MainFile {
         }
         for (File f : list) {
             if (f.isDirectory()) {
-                printAllFiles(f.getAbsolutePath());
-                System.out.println("Directory:" + f.getAbsoluteFile());
+                printAllFiles(f.getPath());
+                System.out.println("Directory:" + f.getPath());
             } else {
-                System.out.println("File:" + f.getAbsoluteFile());
+                System.out.println("File:" + f.getPath());
             }
         }
     }
