@@ -2,11 +2,46 @@ package com.basejava.webapp;
 
 import com.basejava.webapp.model.*;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 public class ResumeTestData {
+
+    public Resume fillOutTheSections(String uuid, String fullName) {
+
+        Resume resume = new Resume(uuid, fullName);
+
+        resume.addContact(ContactType.MOBILE, "Mobile");
+
+        resume.addSection(SectionType.PERSONAL, new TextSection("Personal"));
+        resume.addSection(SectionType.OBJECTIVE, new TextSection("Objective"));
+
+        resume.addSection(SectionType.ACHIEVEMENT, new ListSection(Arrays.asList("Achievement 1", "Achievement 2")));
+        resume.addSection(SectionType.QUALIFICATIONS, new ListSection(Arrays.asList("Qualification 1", "Qualification 2")));
+
+        resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(Arrays.asList(
+                new Experience("Name", "URL", Arrays.asList(
+                        new Position(LocalDate.of(2010, Month.JANUARY, 1), LocalDate.of(2012, Month.JANUARY, 1),
+                                "Title", "Description"),
+                        new Position(LocalDate.of(2015, Month.JANUARY, 1), LocalDate.of(2019, Month.JANUARY, 1),
+                                "Title", "Description")
+                )))));
+        resume.addSection(SectionType.EDUCATION, new OrganizationSection(Arrays.asList(
+                new Experience("Name", "URL", Arrays.asList(
+                        new Position(LocalDate.of(2010, Month.JANUARY, 1), LocalDate.of(2012, Month.JANUARY, 1),
+                                "Title", "Description"),
+                        new Position(LocalDate.of(2015, Month.JANUARY, 1), LocalDate.of(2019, Month.JANUARY, 1),
+                                "Title", "Description")
+                )),
+                new Experience("Name 2", "URL", Arrays.asList(
+                        new Position(LocalDate.of(2010, Month.JANUARY, 1), LocalDate.of(2012, Month.JANUARY, 1),
+                                "Title", "Description"))))));
+        return resume;
+    }
 
     public static void main(String[] args) {
 

@@ -1,14 +1,12 @@
 package com.basejava.webapp.storage;
 
+import com.basejava.webapp.ResumeTestData;
 import com.basejava.webapp.exception.ExistStorageException;
 import com.basejava.webapp.exception.NotExistStorageException;
-import com.basejava.webapp.model.*;
+import com.basejava.webapp.model.Resume;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -26,35 +24,11 @@ public abstract class AbstractStorageTest {
     private static final Resume RESUME_3;
 
     static {
-        RESUME_1 = new Resume(UUID_1, "A");
-        RESUME_2 = new Resume(UUID_2, "B");
-        RESUME_3 = new Resume(UUID_3, "C");
+        ResumeTestData resumeTestData = new ResumeTestData();
 
-        RESUME_1.addContact(ContactType.MOBILE, "0176 46372838");
-
-        RESUME_1.addSection(SectionType.PERSONAL, new TextSection("Personal"));
-        RESUME_1.addSection(SectionType.OBJECTIVE, new TextSection("Objective"));
-
-        RESUME_1.addSection(SectionType.ACHIEVEMENT, new ListSection(Arrays.asList("Achievement 1", "Achievement 2")));
-        RESUME_1.addSection(SectionType.QUALIFICATIONS, new ListSection(Arrays.asList("Qualification 1", "Qualification 2")));
-
-        RESUME_1.addSection(SectionType.EXPERIENCE, new OrganizationSection(Arrays.asList(
-                new Experience("Name", "URL", Arrays.asList(
-                        new Position(LocalDate.of(2010, Month.JANUARY, 1), LocalDate.of(2012, Month.JANUARY, 1),
-                                "Title", "Description"),
-                        new Position(LocalDate.of(2015, Month.JANUARY, 1), LocalDate.of(2019, Month.JANUARY, 1),
-                                "Title", "Description")
-                )))));
-        RESUME_1.addSection(SectionType.EDUCATION, new OrganizationSection(Arrays.asList(
-                new Experience("Name", "URL", Arrays.asList(
-                        new Position(LocalDate.of(2010, Month.JANUARY, 1), LocalDate.of(2012, Month.JANUARY, 1),
-                                "Title", "Description"),
-                        new Position(LocalDate.of(2015, Month.JANUARY, 1), LocalDate.of(2019, Month.JANUARY, 1),
-                                "Title", "Description")
-                )),
-                new Experience("Name 2", "URL", Arrays.asList(
-                        new Position(LocalDate.of(2010, Month.JANUARY, 1), LocalDate.of(2012, Month.JANUARY, 1),
-                                "Title", "Description"))))));
+        RESUME_1 = resumeTestData.fillOutTheSections(UUID_1, "Name 1");
+        RESUME_2 = resumeTestData.fillOutTheSections(UUID_2, "Name 2");
+        RESUME_3 = resumeTestData.fillOutTheSections(UUID_3, "Name 3");
     }
 
     protected AbstractStorageTest(Storage storage) {
