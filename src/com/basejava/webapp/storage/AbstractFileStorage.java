@@ -3,10 +3,7 @@ package com.basejava.webapp.storage;
 import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +22,10 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         }
         this.directory = directory;
     }
+
+    protected abstract void write(Resume resume, OutputStream os) throws IOException;
+
+    protected abstract Resume read(InputStream is) throws IOException;
 
     @Override
     protected List<Resume> getList() {
@@ -48,37 +49,23 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     public void insert(File file, Resume resume) {
         try {
             file.createNewFile();
-            doWrite(resume, file);
         } catch (IOException e) {
-            throw new StorageException("File insert error", file.getName(), e);
+            throw new StorageException("File insert error" + file.getAbsolutePath(), file.getName(), e);
         }
+        renew(file, resume);
     }
-
-    protected abstract void doWrite(Resume r, File file) throws IOException;
 
     @Override
     public void remove(File file) {
-        File[] files = file.listFiles();
-        if (files != null) {
-            for (File f : files) {
-                if (f.isDirectory()) {
-                    remove(f);
-                } else {
-                    if (!f.delete()) {
-                        throw new StorageException("The file could not be deleted", f.getName());
-                    }
-                }
-            }
-            if (!file.delete()) {
-                throw new StorageException("The file could not be deleted", file.getName());
-            }
+        if (!file.delete()) {
+            throw new StorageException("File delete error", file.getName());
         }
     }
 
     @Override
     public void renew(File file, Resume resume) {
         try {
-            doWrite(resume, file);
+            write(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("File update error", file.getName(), e);
         }
@@ -86,15 +73,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public Resume take(File file) {
-        Resume resume;
-        try (FileInputStream fis = new FileInputStream(file.getPath());
-             ObjectInputStream ois = new ObjectInputStream(fis)) {
-
-            resume = (Resume) ois.readObject();
-        } catch (IOException | ClassNotFoundException ex) {
-            throw new StorageException("File read error", file.getName(), ex);
+        try {
+            return read(new BufferedInputStream(new FileInputStream(file)));
+        } catch (IOException e) {
+            throw new StorageException("File read error", file.getName(), e);
         }
-        return resume;
     }
 
     @Override
