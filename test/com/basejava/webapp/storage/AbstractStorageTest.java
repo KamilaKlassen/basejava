@@ -24,11 +24,9 @@ public abstract class AbstractStorageTest {
     private static final Resume RESUME_3;
 
     static {
-        ResumeTestData resumeTestData = new ResumeTestData();
-
-        RESUME_1 = resumeTestData.fillOutTheSections(UUID_1, "Name 1");
-        RESUME_2 = resumeTestData.fillOutTheSections(UUID_2, "Name 2");
-        RESUME_3 = resumeTestData.fillOutTheSections(UUID_3, "Name 3");
+        RESUME_1 = ResumeTestData.fillResume(UUID_1, "Name 1");
+        RESUME_2 = ResumeTestData.fillResume(UUID_2, "Name 2");
+        RESUME_3 = ResumeTestData.fillResume(UUID_3, "Name 3");
     }
 
     protected AbstractStorageTest(Storage storage) {
@@ -56,7 +54,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() throws Exception {
-        Resume resume = new Resume(UUID_3, "C");
+        Resume resume = ResumeTestData.fillResume(UUID_3, "New Name");
         storage.update(resume);
         assertGet(resume);
     }
@@ -77,7 +75,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void save() throws Exception {
-        Resume resume = new Resume("E");
+        Resume resume = ResumeTestData.fillResume("uuid5", "Name 5");
         storage.save(resume);
         assertNotNull(storage.get(resume.getUuid()));
         assertSize(4);

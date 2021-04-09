@@ -11,8 +11,7 @@ import java.util.Map;
 
 public class ResumeTestData {
 
-    public Resume fillOutTheSections(String uuid, String fullName) {
-
+    public static Resume fillResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 
         resume.addContact(ContactType.MOBILE, "Mobile");
@@ -44,7 +43,6 @@ public class ResumeTestData {
     }
 
     public static void main(String[] args) {
-
         //create new Resume
         Resume resume = new Resume("Григорий Кислин");
 
