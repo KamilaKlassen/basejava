@@ -2,6 +2,8 @@ package com.basejava.webapp.model;
 
 import com.basejava.webapp.util.DateUtil;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
@@ -11,7 +13,9 @@ import java.util.Objects;
 
 import static com.basejava.webapp.util.DateUtil.NOW;
 
-public class Experience {
+public class Experience implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private final Link link;
     private List<Position> positionList = new ArrayList<>();
@@ -51,7 +55,7 @@ public class Experience {
         return link + " " + positionList;
     }
 
-    public static class Position {
+    public static class Position implements Serializable {
 
         private final LocalDate startDate;
         private final LocalDate endDate;
