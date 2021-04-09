@@ -31,7 +31,7 @@ public class MainFile {
             throw new RuntimeException(e);
         }
 
-        String myPath = "/Users/kamilaklassen/Desktop/BaseJava/basejava";
+        String myPath = ".";
         printAllFiles(myPath);
     }
 
@@ -46,9 +46,9 @@ public class MainFile {
         for (File f : list) {
             if (f.isDirectory()) {
                 printAllFiles(f.getPath());
-                System.out.println("Directory:" + f.getPath());
+                System.out.println("Directory:" + f.getName());
             } else {
-                System.out.println("File:" + f.getPath());
+                System.out.println("File:" + f.getName());
             }
         }
     }
