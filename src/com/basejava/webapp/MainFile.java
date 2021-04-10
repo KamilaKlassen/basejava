@@ -30,13 +30,12 @@ public class MainFile {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
         String myPath = ".";
-        printAllFiles(myPath);
+        printAllFiles(myPath, "");
     }
 
     //List all files from a directory recursively
-    public static void printAllFiles(String path) {
+    public static void printAllFiles(String path, String s) {
         File root = new File(path);
         File[] list = root.listFiles();
 
@@ -45,10 +44,10 @@ public class MainFile {
         }
         for (File f : list) {
             if (f.isDirectory()) {
-                printAllFiles(f.getPath());
-                System.out.println("Directory:" + f.getName());
+                System.out.println(s + "|-" + "Directory:" + f.getName());
+                printAllFiles(f.getPath(), s + "|  ");
             } else {
-                System.out.println("File:" + f.getName());
+                System.out.println(s + "+-" + "File:" + f.getName());
             }
         }
     }
