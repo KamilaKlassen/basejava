@@ -27,7 +27,7 @@ public class ResumeTestData {
                                 new Experience.Position(2005, Month.JANUARY, 2009, Month.JANUARY, "Position", "Description"))));
         resume.addSection(SectionType.EDUCATION,
                 new OrganizationSection(
-                        new Experience("Organisation", null,
+                        new Experience("Organisation", "URL",
                                 new Experience.Position(1996, Month.JANUARY, 2000, Month.JANUARY, "Title", "Description"),
                                 new Experience.Position(2001, Month.MAY, 2005, Month.JANUARY, "Title", "Description")),
                         new Experience("Organization", "URL")));
