@@ -25,16 +25,10 @@ public class FileStorage extends AbstractStorage<File> {
         this.directory = directory;
     }
 
-
-
     @Override
     protected List<Resume> getAll() {
-        File[] files = directory.listFiles();
-        if (files == null) {
-            throw new StorageException("Directory is empty", null);
-        }
         List<Resume> list = new ArrayList<>();
-        for (File file : files) {
+        for (File file : getListFiles()) {
             list.add(take(file));
         }
         return list;
@@ -87,20 +81,21 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public int size() {
-        String[] list = directory.list();
-        if (list == null) {
-            throw new StorageException("Directory is empty", null);
-        }
-        return list.length;
+        return getListFiles().length;
     }
 
     @Override
     public void clear() {
-        File[] files = directory.listFiles();
-        if (files != null) {
-            for (File f : files) {
-                remove(f);
-            }
+        for (File f : getListFiles()) {
+            remove(f);
         }
+    }
+
+    private File[] getListFiles() {
+        File[] files = directory.listFiles();
+        if (files == null) {
+            throw new StorageException("Directory is empty", null);
+        }
+        return files;
     }
 }
