@@ -26,7 +26,7 @@ public class PathStorage extends AbstractStorage<Path> {
     }
 
     @Override
-    protected List<Resume> getList() {
+    protected List<Resume> getAll() {
         String[] paths = directory.toFile().list();
         if (paths == null) {
             throw new StorageException("Directory read error ", null);

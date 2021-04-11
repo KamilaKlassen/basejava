@@ -28,7 +28,7 @@ public class FileStorage extends AbstractStorage<File> {
 
 
     @Override
-    protected List<Resume> getList() {
+    protected List<Resume> getAll() {
         File[] files = directory.listFiles();
         if (files == null) {
             throw new StorageException("Directory is empty", null);

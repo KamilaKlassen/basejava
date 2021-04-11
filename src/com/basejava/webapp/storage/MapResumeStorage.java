@@ -9,7 +9,7 @@ public class MapResumeStorage extends AbstractStorage<Resume> {
     private Map<String, Resume> mapStorage = new LinkedHashMap<>();
 
     @Override
-    protected List<Resume> getList() {
+    protected List<Resume> getAll() {
         return new ArrayList<>(mapStorage.values());
     }
 
