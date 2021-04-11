@@ -14,9 +14,10 @@ import java.util.Objects;
 public class PathStorage extends AbstractStorage<Path> {
 
     private Path directory;
-    ObjectStorage objectStorage = new ObjectStreamStorage();;
+    Serializer serializer;
 
-    protected PathStorage(String dir) {
+    protected PathStorage(String dir, Serializer serializer) {
+        this.serializer = serializer;
         directory = Paths.get(dir);
         Objects.requireNonNull(directory, "directory must not be null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
@@ -64,7 +65,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     public void renew(Path path, Resume resume) {
         try {
-            objectStorage.write(resume, new BufferedOutputStream(Files.newOutputStream(path)));
+            serializer.write(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Path write error ", resume.getUuid(), e);
         }
@@ -73,7 +74,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     public Resume take(Path path) {
         try {
-            return objectStorage.read(new BufferedInputStream(Files.newInputStream(path)));
+            return serializer.read(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Path read error " + path.getFileName(), path.toString(), e);
         }
