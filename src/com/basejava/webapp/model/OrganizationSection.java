@@ -9,7 +9,10 @@ public class OrganizationSection extends AbstractSection {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private final List<Experience> experienceList;
+    private List<Experience> experienceList;
+
+    public OrganizationSection() {
+    }
 
     public OrganizationSection(Experience... organizations) {
         this(Arrays.asList(organizations));
