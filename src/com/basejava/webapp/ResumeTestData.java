@@ -22,13 +22,13 @@ public class ResumeTestData {
 
         resume.addSection(SectionType.EXPERIENCE,
                 new OrganizationSection(
-                        new Experience("Organization", "URL",
+                        new Experience("Organization", null,
                                 new Experience.Position(2010, Month.JANUARY, "Position", "Description"),
                                 new Experience.Position(2005, Month.JANUARY, 2009, Month.JANUARY, "Position", "Description"))));
         resume.addSection(SectionType.EDUCATION,
                 new OrganizationSection(
                         new Experience("Organisation", "URL",
-                                new Experience.Position(1996, Month.JANUARY, 2000, Month.JANUARY, "Title", "Description"),
+                                new Experience.Position(1996, Month.JANUARY, 2000, Month.JANUARY, "Title", null),
                                 new Experience.Position(2001, Month.MAY, 2005, Month.JANUARY, "Title", "Description")),
                         new Experience("Organization", "URL")));
         return resume;
