@@ -5,8 +5,8 @@ import com.basejava.webapp.model.*;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 public class DataStreamSerializer implements Serializer {
 
@@ -17,27 +17,23 @@ public class DataStreamSerializer implements Serializer {
             dos.writeUTF(resume.getFullName());
 
             //write contacts
-            Map<ContactType, String> contacts = resume.getContacts();
-            dos.writeInt(contacts.size());
-            for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
+            writeCollection(dos, resume.getContacts().entrySet(), entry -> {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
-            }
+            });
 
             //write sections
-            Map<SectionType, AbstractSection> sections = resume.getSections();
-            dos.writeInt(sections.size());
-            for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
+            writeCollection(dos, resume.getSections().entrySet(), entry -> {
                 SectionType sectionType = entry.getKey();
                 AbstractSection section = entry.getValue();
                 dos.writeUTF(sectionType.name());
                 switch (sectionType) {
                     case PERSONAL, OBJECTIVE -> dos.writeUTF(((TextSection) section).getText());
-                    case QUALIFICATIONS, ACHIEVEMENT -> writeList(dos, ((ListSection) section).getList(), dos::writeUTF);
-                    case EDUCATION, EXPERIENCE -> writeList(dos, ((OrganizationSection) section).getExperienceList(), experience -> {
+                    case QUALIFICATIONS, ACHIEVEMENT -> writeCollection(dos, ((ListSection) section).getList(), dos::writeUTF);
+                    case EDUCATION, EXPERIENCE -> writeCollection(dos, ((OrganizationSection) section).getExperienceList(), experience -> {
                         dos.writeUTF(experience.getLink().getName());
                         dos.writeUTF(experience.getLink().getUrl());
-                        writeList(dos, experience.getPositionList(), position -> {
+                        writeCollection(dos, experience.getPositionList(), position -> {
                             writeDate(dos, position.getStartDate());
                             writeDate(dos, position.getEndDate());
                             dos.writeUTF(position.getTitle());
@@ -45,7 +41,7 @@ public class DataStreamSerializer implements Serializer {
                         });
                     });
                 }
-            }
+            });
         }
     }
 
@@ -87,9 +83,9 @@ public class DataStreamSerializer implements Serializer {
         void doWrite(T t) throws IOException;
     }
 
-    private <T> void writeList(DataOutputStream dos, List<T> list, Writer<T> writer) throws IOException {
-        dos.writeInt(list.size());
-        for (T element : list) {
+    private <T> void writeCollection(DataOutputStream dos, Collection<T> collection, Writer<T> writer) throws IOException {
+        dos.writeInt(collection.size());
+        for (T element : collection) {
             writer.doWrite(element);
         }
     }
