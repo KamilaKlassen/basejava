@@ -51,12 +51,10 @@ public class DataStreamSerializer implements Serializer {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            int contactSize = dis.readInt();
-            for (int i = 0; i < contactSize; i++) {
-                resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
-            }
-            int sectionSize = dis.readInt();
-            for (int i = 0; i < sectionSize; i++) {
+
+            readElements(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+
+            readElements(dis, () -> {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
                 switch (sectionType) {
                     case PERSONAL, OBJECTIVE -> resume.addSection(sectionType, new TextSection(dis.readUTF()));
@@ -70,7 +68,7 @@ public class DataStreamSerializer implements Serializer {
                                     ))
                             ))));
                 }
-            }
+            });
             return resume;
         }
     }
@@ -81,6 +79,10 @@ public class DataStreamSerializer implements Serializer {
 
     private interface Writer<T> {
         void doWrite(T t) throws IOException;
+    }
+
+    private interface Handler {
+        void handle() throws IOException;
     }
 
     private <T> void writeCollection(DataOutputStream dos, Collection<T> collection, Writer<T> writer) throws IOException {
@@ -97,6 +99,13 @@ public class DataStreamSerializer implements Serializer {
             list.add(reader.doRead());
         }
         return list;
+    }
+
+    private void readElements(DataInputStream dis, Handler handler) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            handler.handle();
+        }
     }
 
     private void writeDate(DataOutputStream dos, LocalDate localDate) throws IOException {
