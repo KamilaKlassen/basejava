@@ -16,7 +16,6 @@ public class MainConcurrency {
             @Override
             public void run() {
                 System.out.println(getName() + ", " + getState());
-                throw new IllegalStateException();
             }
         };
         thread0.start();
@@ -47,36 +46,26 @@ public class MainConcurrency {
         });
         System.out.println(mainConcurrency.counter);
 
-        //Deadlock
+        deadlock(LOCK, ANOTHER_LOCK);
+        deadlock(ANOTHER_LOCK, LOCK);
 
-        // Thread-1
-        Runnable block1 = () -> {
-            synchronized (LOCK) {
-                System.out.println("Thread 1: Holding lock 1...");
+    }
+
+    private static void deadlock(Object firstLock, Object secondLock) {
+        new Thread(() -> {
+            synchronized (firstLock) {
+                System.out.println("Holding lock 1...");
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.out.println("Thread 1: Waiting for lock 2...");
-                synchronized (ANOTHER_LOCK) {
-                    System.out.println("Thread 1: Holding lock 1 & 2...");
+                System.out.println("Waiting for lock 2...");
+                synchronized (secondLock) {
+                    System.out.println("Holding lock 1 & 2...");
                 }
             }
-        };
-
-        // Thread-2
-        Runnable block2 = () -> {
-            synchronized (ANOTHER_LOCK) {
-                System.out.println("Thread 2: Holding lock 2...");
-                System.out.println("Thread 2: Waiting for lock 1...");
-                synchronized (LOCK) {
-                    System.out.println("Thread 2: Holding lock 2 & 1...");
-                }
-            }
-        };
-        new Thread(block1).start();
-        new Thread(block2).start();
+        }).start();
     }
 
     private synchronized void inc() {
