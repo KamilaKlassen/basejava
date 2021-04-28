@@ -7,7 +7,6 @@ public class MainConcurrency {
     public static final int THREADS_NUMBER = 10000;
     private int counter;
     private static final Object LOCK = new Object();
-    private static final Object ANOTHER_LOCK = new Object();
 
     public static void main(String[] args) throws InterruptedException {
         System.out.println(Thread.currentThread().getName());
@@ -46,29 +45,47 @@ public class MainConcurrency {
         });
         System.out.println(mainConcurrency.counter);
 
-        deadlock(LOCK, ANOTHER_LOCK);
-        deadlock(ANOTHER_LOCK, LOCK);
+        //deadlock
 
+        String lock_1 = "first lock";
+        String lock_2 = "second lock";
+
+        Thread thread_1 = new Thread(new DeadlockRunnable("First Thread", lock_1, lock_2));
+        Thread thread_2 = new Thread(new DeadlockRunnable("Second Thread", lock_2, lock_1));
+
+        thread_1.start();
+        thread_2.start();
     }
 
-    private static void deadlock(Object firstLock, Object secondLock) {
-        new Thread(() -> {
+    private synchronized void inc() {
+        counter++;
+    }
+
+    static class DeadlockRunnable implements Runnable {
+        String name;
+        final Object firstLock;
+        final Object secondLock;
+
+        DeadlockRunnable(String name, String firstLock, String secondLock) {
+            this.firstLock = firstLock;
+            this.secondLock = secondLock;
+            this.name = name;
+        }
+
+        @Override
+        public void run() {
             synchronized (firstLock) {
-                System.out.println("Holding lock 1...");
+                System.out.println(name + " is holding " + firstLock);
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.out.println("Waiting for lock 2...");
+                System.out.println(name + " is waiting for " + secondLock);
                 synchronized (secondLock) {
-                    System.out.println("Holding lock 1 & 2...");
+                    System.out.println(name + "is holding " + firstLock + " " + secondLock);
                 }
             }
-        }).start();
-    }
-
-    private synchronized void inc() {
-        counter++;
+        }
     }
 }
