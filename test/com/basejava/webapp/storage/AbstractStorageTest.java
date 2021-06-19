@@ -28,9 +28,13 @@ public abstract class AbstractStorageTest {
     private static final Resume RESUME_3;
 
     static {
-        RESUME_1 = ResumeTestData.fillResume(UUID_1, "Name 1");
-        RESUME_2 = ResumeTestData.fillResume(UUID_2, "Name 2");
-        RESUME_3 = ResumeTestData.fillResume(UUID_3, "Name 3");
+        RESUME_1 = new Resume(UUID_1, "Name1");
+        RESUME_2 = new Resume(UUID_2, "Name2");
+        RESUME_3 = new Resume(UUID_3, "Name3");
+
+//        RESUME_1 = ResumeTestData.fillResume(UUID_1, "Name 1");
+//        RESUME_2 = ResumeTestData.fillResume(UUID_2, "Name 2");
+//        RESUME_3 = ResumeTestData.fillResume(UUID_3, "Name 3");
     }
 
     protected AbstractStorageTest(Storage storage) {
@@ -117,3 +121,5 @@ public abstract class AbstractStorageTest {
         assertEquals(size, storage.size());
     }
 }
+
+
