@@ -1,8 +1,6 @@
-package com.basejava.webapp.util;
+package com.basejava.webapp.sql;
 
 import com.basejava.webapp.exception.StorageException;
-import com.basejava.webapp.sql.ConnectionFactory;
-import com.basejava.webapp.sql.Executor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -2,7 +2,7 @@ package com.basejava.webapp.storage;
 
 import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.model.Resume;
-import com.basejava.webapp.util.SqlHelper;
+import com.basejava.webapp.sql.SqlHelper;
 
 import java.sql.DriverManager;
 import java.sql.ResultSet;
