@@ -2,7 +2,6 @@ package com.basejava.webapp;
 
 import com.basejava.webapp.model.*;
 
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,24 +12,25 @@ public class ResumeTestData {
         Resume resume = new Resume(uuid, fullName);
 
         resume.addContact(ContactType.MOBILE, "Mobile");
+        resume.addContact(ContactType.SKYPE, "Skype");
 
-        resume.addSection(SectionType.PERSONAL, new TextSection("Personal"));
-        resume.addSection(SectionType.OBJECTIVE, new TextSection("Objective"));
-
-        resume.addSection(SectionType.ACHIEVEMENT, new ListSection("Achievement 1", "Achievement 2"));
-        resume.addSection(SectionType.QUALIFICATIONS, new ListSection("Qualification 1", "Qualification 2"));
-
-        resume.addSection(SectionType.EXPERIENCE,
-                new OrganizationSection(
-                        new Experience("Organization", null,
-                                new Experience.Position(2010, Month.JANUARY, "Position", "Description"),
-                                new Experience.Position(2005, Month.JANUARY, 2009, Month.JANUARY, "Position", "Description"))));
-        resume.addSection(SectionType.EDUCATION,
-                new OrganizationSection(
-                        new Experience("Organisation", "URL",
-                                new Experience.Position(1996, Month.JANUARY, 2000, Month.JANUARY, "Title", null),
-                                new Experience.Position(2001, Month.MAY, 2005, Month.JANUARY, "Title", "Description")),
-                        new Experience("Organization", "URL")));
+//        resume.addSection(SectionType.PERSONAL, new TextSection("Personal"));
+//        resume.addSection(SectionType.OBJECTIVE, new TextSection("Objective"));
+//
+//        resume.addSection(SectionType.ACHIEVEMENT, new ListSection("Achievement 1", "Achievement 2"));
+//        resume.addSection(SectionType.QUALIFICATIONS, new ListSection("Qualification 1", "Qualification 2"));
+//
+//        resume.addSection(SectionType.EXPERIENCE,
+//                new OrganizationSection(
+//                        new Experience("Organization", null,
+//                                new Experience.Position(2010, Month.JANUARY, "Position", "Description"),
+//                                new Experience.Position(2005, Month.JANUARY, 2009, Month.JANUARY, "Position", "Description"))));
+//        resume.addSection(SectionType.EDUCATION,
+//                new OrganizationSection(
+//                        new Experience("Organisation", "URL",
+//                                new Experience.Position(1996, Month.JANUARY, 2000, Month.JANUARY, "Title", null),
+//                                new Experience.Position(2001, Month.MAY, 2005, Month.JANUARY, "Title", "Description")),
+//                        new Experience("Organization", "URL")));
         return resume;
     }
 

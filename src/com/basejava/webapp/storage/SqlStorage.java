@@ -7,6 +7,7 @@ import com.basejava.webapp.sql.SqlHelper;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -99,15 +100,19 @@ public class SqlStorage implements Storage {
                 "FROM resume r LEFT JOIN contact c on r.uuid = c.resume_uuid\n" +
                 "ORDER BY full_name, uuid;", ps -> {
             ResultSet rs = ps.executeQuery();
-            List<Resume> resumes = new ArrayList<>();
-            Resume resume;
+            Map<String, Resume> resumes = new HashMap<>();
 
             while (rs.next()) {
-                resume = new Resume(rs.getString("uuid"), rs.getString("full_name"));
+                String uuid = rs.getString("uuid");
+                Resume resume = resumes.get(uuid);
+
+                if (resume == null) {
+                    resume = new Resume(uuid, rs.getString("full_name"));
+                }
                 addContact(rs, resume);
-                resumes.add(resume);
+                resumes.put(uuid, resume);
             }
-            return resumes;
+            return new ArrayList<>(resumes.values());
         });
     }
 

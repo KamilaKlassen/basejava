@@ -30,19 +30,9 @@ public abstract class AbstractStorageTest {
     private static final Resume RESUME_3;
 
     static {
-        RESUME_1 = new Resume(UUID_1, "Name1");
-        RESUME_2 = new Resume(UUID_2, "Name2");
-        RESUME_3 = new Resume(UUID_3, "Name3");
-
-        RESUME_1.addContact(ContactType.MAIL, "mail@mail.ru");
-        RESUME_1.addContact(ContactType.PHONE, "202020");
-
-        RESUME_3.addContact(ContactType.MAIL, "mail@gmail.com");
-        RESUME_3.addContact(ContactType.SKYPE, "skype20");
-
-//        RESUME_1 = ResumeTestData.fillResume(UUID_1, "Name 1");
-//        RESUME_2 = ResumeTestData.fillResume(UUID_2, "Name 2");
-//        RESUME_3 = ResumeTestData.fillResume(UUID_3, "Name 3");
+        RESUME_1 = ResumeTestData.fillResume(UUID_1, "Name 1");
+        RESUME_2 = ResumeTestData.fillResume(UUID_2, "Name 2");
+        RESUME_3 = ResumeTestData.fillResume(UUID_3, "Name 3");
     }
 
     protected AbstractStorageTest(Storage storage) {
@@ -85,7 +75,7 @@ public abstract class AbstractStorageTest {
     @Test
     public void getAll() throws Exception {
         List<Resume> list = storage.getAllSorted();
-        assertEquals(5, list.size());
+        assertEquals(3, list.size());
         assertEquals(RESUME_1, list.get(0));
         assertEquals(RESUME_2, list.get(1));
         assertEquals(RESUME_3, list.get(2));
