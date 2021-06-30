@@ -6,10 +6,7 @@ import com.basejava.webapp.model.Resume;
 import com.basejava.webapp.sql.SqlHelper;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SqlStorage implements Storage {
     public SqlHelper sqlHelper;
@@ -47,8 +44,8 @@ public class SqlStorage implements Storage {
 
     @Override
     public void update(Resume r) {
-        String uuid = r.getUuid();
         sqlHelper.transactionalExecute(conn -> {
+            String uuid = r.getUuid();
             try (PreparedStatement ps = conn.prepareStatement("UPDATE resume SET full_name = ? WHERE uuid = ?")) {
                 ps.setString(1, r.getFullName());
                 ps.setString(2, uuid);
@@ -56,13 +53,11 @@ public class SqlStorage implements Storage {
                     throw new NotExistStorageException(uuid);
                 }
             }
-            sqlHelper.execute("DELETE  FROM contact WHERE resume_uuid=?", ps -> {
-                ps.setString(1, r.getUuid());
-                ps.execute();
-                return null;
-            });
+            PreparedStatement ps = conn.prepareStatement("DELETE  FROM contact WHERE resume_uuid=?");
+            ps.setString(1, uuid);
+            ps.execute();
 
-            insertContact(conn, r);
+            insertContacts(conn, r);
             return null;
         });
     }
@@ -76,7 +71,7 @@ public class SqlStorage implements Storage {
                 ps.execute();
             }
 
-            insertContact(conn, r);
+            insertContacts(conn, r);
             return null;
         });
     }
@@ -100,7 +95,7 @@ public class SqlStorage implements Storage {
                 "FROM resume r LEFT JOIN contact c on r.uuid = c.resume_uuid\n" +
                 "ORDER BY full_name, uuid;", ps -> {
             ResultSet rs = ps.executeQuery();
-            Map<String, Resume> resumes = new HashMap<>();
+            Map<String, Resume> resumes = new LinkedHashMap<>();
 
             while (rs.next()) {
                 String uuid = rs.getString("uuid");
@@ -131,7 +126,7 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void insertContact(Connection conn, Resume r) throws SQLException {
+    private void insertContacts(Connection conn, Resume r) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO contact (resume_uuid, type, value) VALUES (?,?,?)")) {
             for (Map.Entry<ContactType, String> e : r.getContacts().entrySet()) {
                 ps.setString(1, r.getUuid());
