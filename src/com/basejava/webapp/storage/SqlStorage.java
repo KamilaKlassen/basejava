@@ -91,21 +91,23 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.execute("SELECT *\n" +
-                "FROM resume r LEFT JOIN contact c on r.uuid = c.resume_uuid\n" +
-                "ORDER BY full_name, uuid;", ps -> {
-            ResultSet rs = ps.executeQuery();
+        return sqlHelper.transactionalExecute(conn -> {
             Map<String, Resume> resumes = new LinkedHashMap<>();
 
-            while (rs.next()) {
-                String uuid = rs.getString("uuid");
-                Resume resume = resumes.get(uuid);
-
-                if (resume == null) {
-                    resume = new Resume(uuid, rs.getString("full_name"));
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume ORDER BY full_name, uuid")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    String uuid = rs.getString("uuid");
+                    resumes.put(uuid, new Resume(uuid, rs.getString("full_name")));
                 }
-                addContact(rs, resume);
-                resumes.put(uuid, resume);
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contact")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    Resume r = resumes.get(rs.getString("resume_uuid"));
+                    addContact(rs, r);
+                }
             }
             return new ArrayList<>(resumes.values());
         });
