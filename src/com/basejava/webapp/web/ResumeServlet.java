@@ -1,6 +1,7 @@
 package com.basejava.webapp.web;
 
 import com.basejava.webapp.Config;
+import com.basejava.webapp.model.Resume;
 import com.basejava.webapp.storage.Storage;
 
 import javax.servlet.*;
@@ -44,6 +45,18 @@ public class ResumeServlet extends HttpServlet {
                                 <th>E-Mail</th>
                             </tr>"""
         );
+        for (Resume resume : storage.getAllSorted()) {
+            writer.write("<tr>\n" +
+                    "  <th>" + resume.getFullName() + "</th>\n" +
+                    "  <th>" + resume.getUuid() + "</th>\n" +
+                    "   </tr>"
+            );
+            writer.write("""
+                    </table>
+                    </body>
+                    </html>
+                    """);
+        }
     }
 
     @Override
