@@ -42,21 +42,21 @@ public class ResumeServlet extends HttpServlet {
                         <table>
                             <tr>
                                 <th>Имя</th>
-                                <th>E-Mail</th>
+                                <th>Uuid</th>
                             </tr>"""
         );
         for (Resume resume : storage.getAllSorted()) {
             writer.write("<tr>\n" +
-                    "  <th>" + resume.getFullName() + "</th>\n" +
-                    "  <th>" + resume.getUuid() + "</th>\n" +
+                    "  <td>" + resume.getFullName() + "</td>\n" +
+                    "  <td>" + resume.getUuid() + "</td>\n" +
                     "   </tr>"
             );
-            writer.write("""
-                    </table>
-                    </body>
-                    </html>
-                    """);
         }
+        writer.write("""
+                </table>
+                </body>
+                </html>
+                """);
     }
 
     @Override
