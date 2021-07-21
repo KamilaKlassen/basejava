@@ -11,7 +11,13 @@ import java.io.Writer;
 
 public class ResumeServlet extends HttpServlet {
 
-    private final Storage storage = Config.get().getStorage();
+    private Storage storage;
+
+    @Override
+    public void init(ServletConfig servletConfig) throws ServletException {
+        super.init(servletConfig);
+        storage = Config.get().getStorage();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
