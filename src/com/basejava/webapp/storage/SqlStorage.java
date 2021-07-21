@@ -1,15 +1,14 @@
 package com.basejava.webapp.storage;
 
 import com.basejava.webapp.exception.NotExistStorageException;
-import com.basejava.webapp.model.AbstractSection;
-import com.basejava.webapp.model.ContactType;
-import com.basejava.webapp.model.Resume;
-import com.basejava.webapp.model.SectionType;
+import com.basejava.webapp.model.*;
 import com.basejava.webapp.sql.SqlHelper;
-import com.google.gson.Gson;
 
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SqlStorage implements Storage {
     public SqlHelper sqlHelper;
@@ -75,7 +74,7 @@ public class SqlStorage implements Storage {
             deleteContacts(conn, resume);
             deleteSections(conn, resume);
             insertContacts(conn, resume);
-            insertSection(conn, resume);
+            insertSections(conn, resume);
             return null;
         });
     }
@@ -90,7 +89,7 @@ public class SqlStorage implements Storage {
             }
 
             insertContacts(conn, resume);
-            insertSection(conn, resume);
+            insertSections(conn, resume);
             return null;
         });
     }
@@ -156,10 +155,22 @@ public class SqlStorage implements Storage {
     }
 
     private void addSection(ResultSet rs, Resume resume) throws SQLException {
-        String text = rs.getString("text");
-        if (text != null) {
-            SectionType type = SectionType.valueOf(rs.getString("type"));
-            resume.addSection(type, new Gson().fromJson(text, AbstractSection.class));
+        String value = rs.getString("value");
+        if (value != null) {
+            String type = rs.getString("type");
+            switch (type) {
+                case "PERSONAL":
+                case "OBJECTIVE":
+                    resume.addSection(SectionType.valueOf(type), new TextSection(value));
+                    break;
+                case "ACHIEVEMENT":
+                case "QUALIFICATIONS":
+                    resume.addSection(SectionType.valueOf(type), new ListSection(value.split("\n")));
+                    break;
+                case "EXPERIENCE":
+                case "EDUCATION":
+                    break;
+            }
         }
     }
 
@@ -175,13 +186,27 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void insertSection(Connection conn, Resume resume) throws SQLException {
+    private void insertSections(Connection conn, Resume resume) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO section (resume_uuid, type, value) VALUES (?,?,?)")) {
             for (Map.Entry<SectionType, AbstractSection> e : resume.getSections().entrySet()) {
                 ps.setString(1, resume.getUuid());
-                ps.setString(2, e.getKey().name());
-                AbstractSection section = e.getValue();
-                ps.setString(3, new Gson().toJson(section, AbstractSection.class));
+                String sectionType = e.getKey().name();
+                ps.setString(2, sectionType);
+                String value = null;
+                switch (sectionType) {
+                    case "PERSONAL":
+                    case "OBJECTIVE":
+                        value = ((TextSection) (e.getValue())).getText();
+                        break;
+                    case "ACHIEVEMENT":
+                    case "QUALIFICATIONS":
+                        value = String.join("\n", ((ListSection) (e.getValue())).getList());
+                        break;
+                    case "EXPERIENCE":
+                    case "EDUCATION":
+                        break;
+                }
+                ps.setString(3, value);
                 ps.addBatch();
             }
             ps.executeBatch();
