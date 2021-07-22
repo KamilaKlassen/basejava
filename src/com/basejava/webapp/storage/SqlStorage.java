@@ -157,18 +157,18 @@ public class SqlStorage implements Storage {
     private void addSection(ResultSet rs, Resume resume) throws SQLException {
         String value = rs.getString("value");
         if (value != null) {
-            String type = rs.getString("type");
-            switch (type) {
-                case "PERSONAL":
-                case "OBJECTIVE":
-                    resume.addSection(SectionType.valueOf(type), new TextSection(value));
+            SectionType sectionType = SectionType.valueOf(rs.getString("sectionType"));
+            switch (sectionType) {
+                case PERSONAL:
+                case OBJECTIVE:
+                    resume.addSection(sectionType, new TextSection(value));
                     break;
-                case "ACHIEVEMENT":
-                case "QUALIFICATIONS":
-                    resume.addSection(SectionType.valueOf(type), new ListSection(value.split("\n")));
+                case ACHIEVEMENT:
+                case QUALIFICATIONS:
+                    resume.addSection(sectionType, new ListSection(value.split("\n")));
                     break;
-                case "EXPERIENCE":
-                case "EDUCATION":
+                case EXPERIENCE:
+                case EDUCATION:
                     break;
             }
         }
@@ -190,20 +190,20 @@ public class SqlStorage implements Storage {
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO section (resume_uuid, type, value) VALUES (?,?,?)")) {
             for (Map.Entry<SectionType, AbstractSection> e : resume.getSections().entrySet()) {
                 ps.setString(1, resume.getUuid());
-                String sectionType = e.getKey().name();
-                ps.setString(2, sectionType);
+                SectionType sectionType = e.getKey();
+                ps.setString(2, sectionType.name());
                 String value = null;
                 switch (sectionType) {
-                    case "PERSONAL":
-                    case "OBJECTIVE":
+                    case PERSONAL:
+                    case OBJECTIVE:
                         value = ((TextSection) (e.getValue())).getText();
                         break;
-                    case "ACHIEVEMENT":
-                    case "QUALIFICATIONS":
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
                         value = String.join("\n", ((ListSection) (e.getValue())).getList());
                         break;
-                    case "EXPERIENCE":
-                    case "EDUCATION":
+                    case EXPERIENCE:
+                    case EDUCATION:
                         break;
                 }
                 ps.setString(3, value);
