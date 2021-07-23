@@ -3,6 +3,7 @@ package com.basejava.webapp.storage;
 import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.model.*;
 import com.basejava.webapp.sql.SqlHelper;
+import com.basejava.webapp.util.JsonParser;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -157,20 +158,8 @@ public class SqlStorage implements Storage {
     private void addSection(ResultSet rs, Resume resume) throws SQLException {
         String value = rs.getString("value");
         if (value != null) {
-            SectionType sectionType = SectionType.valueOf(rs.getString("sectionType"));
-            switch (sectionType) {
-                case PERSONAL:
-                case OBJECTIVE:
-                    resume.addSection(sectionType, new TextSection(value));
-                    break;
-                case ACHIEVEMENT:
-                case QUALIFICATIONS:
-                    resume.addSection(sectionType, new ListSection(value.split("\n")));
-                    break;
-                case EXPERIENCE:
-                case EDUCATION:
-                    break;
-            }
+            SectionType type = SectionType.valueOf(rs.getString("type"));
+            resume.addSection(type, JsonParser.read(value, AbstractSection.class));
         }
     }
 
@@ -188,25 +177,11 @@ public class SqlStorage implements Storage {
 
     private void insertSections(Connection conn, Resume resume) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO section (resume_uuid, type, value) VALUES (?,?,?)")) {
-            for (Map.Entry<SectionType, AbstractSection> e : resume.getSections().entrySet()) {
+            for (Map.Entry<SectionType, AbstractSection> entry : resume.getSections().entrySet()) {
                 ps.setString(1, resume.getUuid());
-                SectionType sectionType = e.getKey();
-                ps.setString(2, sectionType.name());
-                String value = null;
-                switch (sectionType) {
-                    case PERSONAL:
-                    case OBJECTIVE:
-                        value = ((TextSection) (e.getValue())).getText();
-                        break;
-                    case ACHIEVEMENT:
-                    case QUALIFICATIONS:
-                        value = String.join("\n", ((ListSection) (e.getValue())).getList());
-                        break;
-                    case EXPERIENCE:
-                    case EDUCATION:
-                        break;
-                }
-                ps.setString(3, value);
+                ps.setString(2, entry.getKey().name());
+                AbstractSection section = entry.getValue();
+                ps.setString(3, JsonParser.write(section, AbstractSection.class));
                 ps.addBatch();
             }
             ps.executeBatch();
