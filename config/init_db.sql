@@ -14,7 +14,7 @@ CREATE TABLE contact
 
 CREATE TABLE section
 (
-    id          SERIAL,
+    id          SERIAL PRIMARY KEY,
     resume_uuid CHAR(36) NOT NULL REFERENCES resume (uuid) ON DELETE CASCADE,
     type        TEXT     NOT NULL,
     value       TEXT     NOT NULL
