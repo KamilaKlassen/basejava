@@ -1,13 +1,14 @@
 package com.basejava.webapp.web;
 
 import com.basejava.webapp.Config;
-import com.basejava.webapp.model.Resume;
 import com.basejava.webapp.storage.Storage;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.Writer;
 
 public class ResumeServlet extends HttpServlet {
 
@@ -21,48 +22,8 @@ public class ResumeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html; charset=UTF-8");
-
-        Writer writer = response.getWriter();
-        writer.write(
-                """
-                        <!DOCTYPE html>
-                        <html>
-                        <head>
-                            <meta charset="UTF-8">
-                            <title>Список резюме</title>
-                            <style>
-                                table, th, td {
-                                    border: 1px solid black;
-                                    border-collapse: collapse;
-                                }
-
-                                th,td {
-                                    padding: 5px;
-                                }
-                            </style>
-                        </head>
-                        <body>
-                        <table>
-                            <tr>
-                                <th>Имя</th>
-                                <th>Uuid</th>
-                            </tr>"""
-        );
-        for (Resume resume : storage.getAllSorted()) {
-            writer.write("<tr>\n" +
-                    "  <td>" + resume.getFullName() + "</td>\n" +
-                    "  <td>" + resume.getUuid() + "</td>\n" +
-                    "   </tr>"
-            );
-        }
-        writer.write("""
-                </table>
-                </body>
-                </html>
-                """);
+        request.setAttribute("resumes", storage.getAllSorted());
+        request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
     }
 
     @Override
