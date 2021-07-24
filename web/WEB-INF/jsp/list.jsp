@@ -10,6 +10,7 @@
         table, th, td {
             border: 1px solid black;
             border-collapse: collapse;
+            font-family: "Gill Sans", sans-serif;
         }
 
         th, td {
@@ -22,6 +23,7 @@
     </style>
 </head>
 <body>
+<jsp:include page="fragments/header.jsp"/>
 <section>
     <table>
         <tr>
@@ -43,5 +45,6 @@
         %>
     </table>
 </section>
+<jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>
