@@ -5,21 +5,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Список всех резюме</title>
-    <style>
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-            font-family: "Gill Sans", sans-serif;
-        }
-
-        th, td {
-            padding: 5px;
-        }
-
-        th, td:hover {
-            background-color: lightblue;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <jsp:include page="fragments/header.jsp"/>
