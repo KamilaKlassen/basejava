@@ -59,6 +59,22 @@ li {
     margin: 15px 0;
 }
 
+a:link.add, a:visited.add {
+    background-color: white;
+    color: black;
+    border: 2px solid lightblue;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+a:hover.add, a:active.add {
+    background-color: lightblue;
+    color: white;
+}
+
+/*
 a[href^="skype:"] {
     padding-left: 20px !important;
     background: url(../img/skype.png) no-repeat center left;
@@ -82,4 +98,4 @@ a[href^="https://www.linkedin.com"] {
 a[href*="github."] {
     padding-left: 20px !important;
     background: url(../img/github.png) no-repeat center left;
-}
+}*/
