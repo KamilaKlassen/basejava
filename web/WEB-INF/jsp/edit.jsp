@@ -1,4 +1,6 @@
 <%@ page import="com.basejava.webapp.model.ContactType" %>
+<%@ page import="com.basejava.webapp.model.SectionType" %>
+<%@ page import="com.basejava.webapp.model.ListSection" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -17,6 +19,8 @@
             <dt>Имя:</dt>
             <dd><input type="text" name="fullName" size=50 value="${resume.fullName}"></dd>
         </dl>
+
+        <%--Contacts--%>
         <h3>Контакты:</h3>
         <c:forEach var="type" items="<%=ContactType.values()%>">
             <dl>
@@ -24,13 +28,34 @@
                 <dd><input type="text" name="${type.name()}" size=30 value="${resume.getContact(type)}"></dd>
             </dl>
         </c:forEach>
+
+
+        <%--Sections--%>
         <h3>Секции:</h3>
-        <input type="text" name="section" size=30 value="1"><br/>
-        <input type="text" name="section" size=30 value="2"><br/>
-        <input type="text" name="section" size=30 value="3"><br/>
+        <c:forEach var="typeSection" items="<%=SectionType.values()%>">
+            <c:set var="section" value="${resume.getSection(typeSection)}"/>
+            <jsp:useBean id="section"
+                         type="com.basejava.webapp.model.AbstractSection"/>
+            <dl>
+                <dt>${typeSection.title}</dt>
+                <dd>
+                    <c:choose>
+                        <c:when test="${typeSection=='PERSONAL' || typeSection=='OBJECTIVE'}">
+                            <textarea name='${typeSection}' cols=100 rows=3><%=section%></textarea><br>
+                        </c:when>
+                        <c:when test="${typeSection=='QUALIFICATIONS' || typeSection=='ACHIEVEMENT'}">
+                            <textarea name='${typeSection}' cols=100
+                                      rows=5><%=String.join("\n", ((ListSection) section).getList())%></textarea><br>
+                        </c:when>
+                    </c:choose>
+                </dd>
+            </dl>
+        </c:forEach>
         <hr>
+
+        <%--Buttons--%>
         <button type="submit">Сохранить</button>
-        <button onclick="window.history.back()">Отменить</button>
+        <button type="reset" onclick="window.history.back()">Отменить</button>
     </form>
 </section>
 <jsp:include page="fragments/footer.jsp"/>

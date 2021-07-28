@@ -13,6 +13,7 @@ public class ResumeTestData {
 
         resume.addContact(ContactType.MOBILE, "Mobile");
         resume.addContact(ContactType.SKYPE, "Skype");
+        resume.addContact(ContactType.MAIL,"mail@gmail.com");
 
         resume.addSection(SectionType.PERSONAL, new TextSection("Personal"));
         resume.addSection(SectionType.OBJECTIVE, new TextSection("Objective"));
