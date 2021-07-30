@@ -1,8 +1,7 @@
 package com.basejava.webapp.web;
 
 import com.basejava.webapp.Config;
-import com.basejava.webapp.model.ContactType;
-import com.basejava.webapp.model.Resume;
+import com.basejava.webapp.model.*;
 import com.basejava.webapp.storage.Storage;
 
 import javax.servlet.ServletConfig;
@@ -38,9 +37,30 @@ public class ResumeServlet extends HttpServlet {
                 response.sendRedirect("resume");
                 return;
             }
-            case "view", "edit" -> resume = storage.get(uuid);
+            case "view" -> resume = storage.get(uuid);
+            case "add" -> resume = new Resume();
+            case "edit" -> {
+                resume = storage.get(uuid);
+                for (SectionType type : SectionType.values()) {
+                    AbstractSection section = resume.getSection(type);
+                    switch (type) {
+                        case OBJECTIVE, PERSONAL -> {
+                            if (section == null) {
+                                section = new TextSection(" ");
+                            }
+                        }
+                        case ACHIEVEMENT, QUALIFICATIONS -> {
+                            if (section == null) {
+                                section = new ListSection(" ");
+                            }
+                        }
+                    }
+                    resume.addSection(type, section);
+                }
+            }
             default -> throw new IllegalArgumentException("Action " + action + " is illegal");
         }
+
         request.setAttribute("resume", resume);
         request.getRequestDispatcher(
                 ("view".equals(action) ? "/WEB-INF/jsp/view.jsp" : "/WEB-INF/jsp/edit.jsp")
@@ -48,21 +68,33 @@ public class ResumeServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws
+            ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName");
-        Resume r = storage.get(uuid);
-        r.setFullName(fullName);
+        Resume resume = storage.get(uuid);
+        resume.setFullName(fullName);
+
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
             if (value != null && value.trim().length() != 0) {
-                r.addContact(type, value);
+                resume.addContact(type, value);
             } else {
-                r.getContacts().remove(type);
+                resume.getContacts().remove(type);
             }
         }
-        storage.update(r);
+
+        for (SectionType sectionType : SectionType.values()) {
+            String value = request.getParameter(sectionType.name());
+            if (value != null && value.trim().length() != 0) {
+                switch (sectionType.name()) {
+                    case "OBJECTIVE", "PERSONAL" -> resume.addSection(sectionType, new TextSection(value));
+                    case "ACHIEVEMENT", "QUALIFICATIONS" -> resume.addSection(sectionType, new ListSection(value.split("\n")));
+                }
+            }
+        }
+        storage.update(resume);
         response.sendRedirect("resume");
     }
 }
