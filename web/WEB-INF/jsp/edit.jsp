@@ -34,8 +34,8 @@
         <h3>Секции:</h3>
         <c:forEach var="typeSection" items="<%=SectionType.values()%>">
             <c:set var="section" value="${resume.getSection(typeSection)}"/>
-            <jsp:useBean id="section"
-                         type="com.basejava.webapp.model.AbstractSection"/>
+            <jsp:useBean id="section" type="com.basejava.webapp.model.AbstractSection"/>
+            <jsp:useBean id="typeSection" type="com.basejava.webapp.model.SectionType"/>
             <dl>
                 <dt>${typeSection.title}</dt>
                 <dd>
