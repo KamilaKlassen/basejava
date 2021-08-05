@@ -22,6 +22,11 @@
         </c:forEach>
     <p>
 </section>
+
+<div id="photo">
+    <img id="output" src="img/no-photo.png" width="120" height="auto">
+</div>
+
 <section>
     <p>
         <c:forEach var="sectionEntry" items="${resume.sections}">
@@ -30,8 +35,8 @@
             <c:set var="type" value="${sectionEntry.key}"/>
             <c:set var="section" value="${sectionEntry.value}"/>
             <jsp:useBean id="section" type="com.basejava.webapp.model.AbstractSection"/>
-            <h3>${type.title}</h3><br>
-        <c:choose>
+    <h3>${type.title}</h3><br>
+    <c:choose>
         <c:when test="${type=='PERSONAL' || type=='OBJECTIVE'}">
     <h4><%=section%></h4>
     <br>

@@ -11,6 +11,12 @@ th, td {
     padding: 5px;
 }
 
+div#photo{
+   position: absolute;
+    right: 25%;
+    top: 10%;
+}
+
 th, td:hover {
     background-color: lightblue;
 }
@@ -78,24 +84,29 @@ a:hover.add, a:active.add {
 a[href^="skype:"] {
     padding-left: 20px !important;
     background: url(../img/skype.png) no-repeat center left;
+    background-size: 18px;
 }
 
 a[href^="mailto:"] {
     padding-left: 20px !important;
     background: url(../img/email.png) no-repeat center left;
+    background-size: 18px;
 }
 
 a[href^="https://stackoverflow.com"] {
     padding-left: 20px !important;
     background: url(../img/overflowing.png) no-repeat center left;
+    background-size: 18px;
 }
 
 a[href^="https://www.linkedin.com"] {
     padding-left: 20px !important;
     background: url(../img/linkedin.png) no-repeat center left;
+    background-size: 18px;
 }
 
 a[href*="github."] {
     padding-left: 20px !important;
     background: url(../img/github.png) no-repeat center left;
+    background-size: 18px;
 }
