@@ -10,10 +10,11 @@
 </head>
 <body>
 <jsp:include page="fragments/header.jsp"/>
+
+<%--Contacts--%>
 <section>
     <h2>${resume.fullName}&nbsp;<a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/edit-button.png"
-                                                                                      width="35"></a>
-    </h2>
+                                                                                      width="35"></a></h2>
     <p>
         <c:forEach var="contactEntry" items="${resume.contacts}">
             <jsp:useBean id="contactEntry"
@@ -23,10 +24,14 @@
     <p>
 </section>
 
+
+<%--Default photo--%>
 <div id="photo">
     <img id="output" src="img/no-photo.png" width="120" height="auto">
 </div>
 
+
+<%--Sections--%>
 <section>
     <p>
         <c:forEach var="sectionEntry" items="${resume.sections}">
@@ -38,17 +43,18 @@
     <h3>${type.title}</h3><br>
     <c:choose>
         <c:when test="${type=='PERSONAL' || type=='OBJECTIVE'}">
-    <h4><%=section%></h4>
-    <br>
-    <hr>
-    </c:when>
-    <c:when test="${type=='QUALIFICATIONS' || type=='ACHIEVEMENT'}">
+            <h4><%=section%>
+            </h4>
+            <br>
+            <hr>
+        </c:when>
+        <c:when test="${type=='QUALIFICATIONS' || type=='ACHIEVEMENT'}">
 
-        <c:forEach var="item" items="<%=((ListSection) section).getList()%>">
-            <li>${item}</li>
-        </c:forEach>
-        <hr>
-    </c:when>
+            <c:forEach var="item" items="<%=((ListSection) section).getList()%>">
+                <li>${item}</li>
+            </c:forEach>
+            <hr>
+        </c:when>
     </c:choose>
     </c:forEach>
     </p>
