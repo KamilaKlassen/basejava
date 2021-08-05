@@ -42,7 +42,7 @@ public class ResumeServlet extends HttpServlet {
             }
             case "view" -> resume = storage.get(uuid);
             case "add" -> {
-                resume = new Resume(" ");
+                resume = new Resume();
                 resume.addContact(ContactType.MAIL, " ");
                 resume.addContact(ContactType.SKYPE, " ");
                 resume.addSection(SectionType.OBJECTIVE, new TextSection(" "));
@@ -67,6 +67,12 @@ public class ResumeServlet extends HttpServlet {
                         case ACHIEVEMENT, QUALIFICATIONS -> {
                             if (section == null) {
                                 section = new ListSection(" ", " ", " ");
+                            }
+                        }
+                        case EDUCATION, EXPERIENCE -> {
+                            if (section == null) {
+                                section = new OrganizationSection(new Experience(" ", " ",
+                                        new Experience.Position()));
                             }
                         }
                     }
