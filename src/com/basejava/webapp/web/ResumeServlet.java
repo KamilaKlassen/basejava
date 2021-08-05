@@ -43,15 +43,15 @@ public class ResumeServlet extends HttpServlet {
             case "view" -> resume = storage.get(uuid);
             case "add" -> {
                 resume = new Resume();
-                resume.addContact(ContactType.MAIL, " ");
-                resume.addContact(ContactType.SKYPE, " ");
-                resume.addSection(SectionType.OBJECTIVE, new TextSection(" "));
-                resume.addSection(SectionType.PERSONAL, new TextSection(" "));
-                resume.addSection(SectionType.ACHIEVEMENT, new ListSection(" ", " "));
-                resume.addSection(SectionType.QUALIFICATIONS, new ListSection(" ", " "));
-                resume.addSection(SectionType.EDUCATION, new OrganizationSection(new Experience(" ", " ",
+                resume.addContact(ContactType.MAIL, "");
+                resume.addContact(ContactType.SKYPE, "");
+                resume.addSection(SectionType.OBJECTIVE, new TextSection(""));
+                resume.addSection(SectionType.PERSONAL, new TextSection(""));
+                resume.addSection(SectionType.ACHIEVEMENT, new ListSection(""));
+                resume.addSection(SectionType.QUALIFICATIONS, new ListSection(""));
+                resume.addSection(SectionType.EDUCATION, new OrganizationSection(new Experience("", "",
                         new Experience.Position())));
-                resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(new Experience(" ", " ",
+                resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(new Experience("", "",
                         new Experience.Position())));
             }
             case "edit" -> {
@@ -61,17 +61,17 @@ public class ResumeServlet extends HttpServlet {
                     switch (type) {
                         case OBJECTIVE, PERSONAL -> {
                             if (section == null) {
-                                section = new TextSection(" ");
+                                section = new TextSection("");
                             }
                         }
                         case ACHIEVEMENT, QUALIFICATIONS -> {
                             if (section == null) {
-                                section = new ListSection(" ", " ", " ");
+                                section = new ListSection("");
                             }
                         }
                         case EDUCATION, EXPERIENCE -> {
                             if (section == null) {
-                                section = new OrganizationSection(new Experience(" ", " ",
+                                section = new OrganizationSection(new Experience("", "",
                                         new Experience.Position()));
                             }
                         }
