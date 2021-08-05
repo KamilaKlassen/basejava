@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ResumeServlet extends HttpServlet {
 
@@ -110,7 +111,17 @@ public class ResumeServlet extends HttpServlet {
             if (value != null && value.trim().length() != 0) {
                 switch (sectionType.name()) {
                     case "OBJECTIVE", "PERSONAL" -> resume.addSection(sectionType, new TextSection(value));
-                    case "ACHIEVEMENT", "QUALIFICATIONS" -> resume.addSection(sectionType, new ListSection(value.split("\n")));
+                    case "ACHIEVEMENT", "QUALIFICATIONS" -> {
+                        String[] array = value.split("\n");
+                        ArrayList<String> result = new ArrayList<>();
+
+                        for (String str : array) {
+                            if (str != null && str.trim().length() != 0) {
+                                result.add(str);
+                            }
+                        }
+                        resume.addSection(sectionType, new ListSection(result));
+                    }
                 }
             }
         }
