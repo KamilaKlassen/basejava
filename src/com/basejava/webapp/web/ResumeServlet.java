@@ -25,12 +25,14 @@ public class ResumeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String uuid = request.getParameter("uuid");
         String action = request.getParameter("action");
+
         if (action == null) {
             request.setAttribute("resumes", storage.getAllSorted());
             request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
             return;
         }
         Resume resume;
+
         switch (action) {
             case "delete" -> {
                 storage.delete(uuid);
@@ -38,7 +40,19 @@ public class ResumeServlet extends HttpServlet {
                 return;
             }
             case "view" -> resume = storage.get(uuid);
-            case "add" -> resume = new Resume();
+            case "add" -> {
+                resume = new Resume(" ");
+                resume.addContact(ContactType.MAIL, " ");
+                resume.addContact(ContactType.SKYPE, " ");
+                resume.addSection(SectionType.OBJECTIVE, new TextSection(" "));
+                resume.addSection(SectionType.PERSONAL, new TextSection(" "));
+                resume.addSection(SectionType.ACHIEVEMENT, new ListSection(" ", " "));
+                resume.addSection(SectionType.QUALIFICATIONS, new ListSection(" ", " "));
+                resume.addSection(SectionType.EDUCATION, new OrganizationSection(new Experience(" ", " ",
+                        new Experience.Position())));
+                resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(new Experience(" ", " ",
+                        new Experience.Position())));
+            }
             case "edit" -> {
                 resume = storage.get(uuid);
                 for (SectionType type : SectionType.values()) {
@@ -51,7 +65,7 @@ public class ResumeServlet extends HttpServlet {
                         }
                         case ACHIEVEMENT, QUALIFICATIONS -> {
                             if (section == null) {
-                                section = new ListSection(" ");
+                                section = new ListSection(" ", " ", " ");
                             }
                         }
                     }
@@ -73,8 +87,14 @@ public class ResumeServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName");
-        Resume resume = storage.get(uuid);
-        resume.setFullName(fullName);
+        Resume resume;
+
+        if (uuid == null || uuid.length() == 0) {
+            resume = new Resume(fullName);
+        } else {
+            resume = storage.get(uuid);
+            resume.setFullName(fullName);
+        }
 
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
@@ -94,7 +114,12 @@ public class ResumeServlet extends HttpServlet {
                 }
             }
         }
-        storage.update(resume);
+
+        if (uuid == null || uuid.length() == 0) {
+            storage.save(resume);
+        } else {
+            storage.update(resume);
+        }
         response.sendRedirect("resume");
     }
 }
