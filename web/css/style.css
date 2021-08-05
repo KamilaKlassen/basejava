@@ -66,13 +66,14 @@ li {
 }
 
 a:link.add, a:visited.add {
-    background-color: white;
     color: black;
     border: 2px solid lightblue;
-    padding: 10px 20px;
+    padding: 15px 15px 15px 40px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
+    background: url(../img/plus.png) no-repeat center left;
+    background-size: 35px;
 }
 
 a:hover.add, a:active.add {
