@@ -12,15 +12,19 @@ public class ResumeTestData {
     public static Resume fillResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 
-        resume.addContact(ContactType.MOBILE, "Mobile");
-        resume.addContact(ContactType.SKYPE, "Skype");
-        resume.addContact(ContactType.MAIL,"mail@gmail.com");
+        resume.addContact(ContactType.MOBILE, "+7(921) 855-0482");
+        resume.addContact(ContactType.SKYPE, "grigory.kislin");
+        resume.addContact(ContactType.MAIL,"gkislin@yandex.ru");
+        resume.addContact(ContactType.GITHUB, "github.com/gkislin");
 
-        resume.addSection(SectionType.PERSONAL, new TextSection("Personal"));
-        resume.addSection(SectionType.OBJECTIVE, new TextSection("Objective"));
+        resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
+        resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
 
-        resume.addSection(SectionType.ACHIEVEMENT, new ListSection("Achievement 1", "Achievement 2"));
-        resume.addSection(SectionType.QUALIFICATIONS, new ListSection("Qualification 1", "Qualification 2"));
+        resume.addSection(SectionType.ACHIEVEMENT, new ListSection("Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike. Интеграция с Twilio, DuoSecurity, Google Authenticator, Jira, Zendesk.",
+                "Реализация протоколов по приему платежей всех основных платежных системы России (Cyberplat, Eport, Chronopay, Сбербанк), Белоруcсии(Erip, Osmp) и Никарагуа."));
+        resume.addSection(SectionType.QUALIFICATIONS, new ListSection("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2",
+                "Java Frameworks: Java 8 (Time API, Streams), Guava, Java Executor, MyBatis, Spring (MVC, Security, Data, Clouds, Boot), JPA (Hibernate, EclipseLink), Guice, GWT(SmartGWT, ExtGWT/GXT), Vaadin, Jasperreports, " +
+                        "Apache Commons, Eclipse SWT, JUnit, Selenium (htmlelements)."));
 
         resume.addSection(SectionType.EXPERIENCE,
                 new OrganizationSection(
