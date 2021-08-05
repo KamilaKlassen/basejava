@@ -14,9 +14,9 @@
     <table>
         <tr>
             <th>Имя</th>
-            <th>Email</th>
-            <th></th>
-            <th></th>
+            <th colspan="2">Контактные данные</th>
+            <th>Удалить резюме</th>
+            <th>Редактировать резюме</th>
         </tr>
         <c:forEach items="${resumes}" var="resume">
             <jsp:useBean id="resume" type="com.basejava.webapp.model.Resume"/>
@@ -24,8 +24,10 @@
                 <td><a href="resume?uuid=${resume.uuid}&action=view">${resume.fullName}</a></td>
                 <td><%=ContactType.MAIL.toHtml(resume.getContact(ContactType.MAIL))%>
                 </td>
-                <td><a href="resume?uuid=${resume.uuid}&action=delete"><img src="img/cancel.png" width="35"></a></td>
-                <td><a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/edit-button.png" width="35"></a></td>
+                <td><%=ContactType.MOBILE.toHtml(resume.getContact(ContactType.MOBILE))%>
+                </td>
+                <td align="center"><a href="resume?uuid=${resume.uuid}&action=delete"><img src="img/cancel.png" width="35"></a></td>
+                <td align="center"><a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/edit-button.png" width="35"></a></td>
             </tr>
         </c:forEach>
     </table>
