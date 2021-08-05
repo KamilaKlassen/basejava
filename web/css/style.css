@@ -56,7 +56,7 @@ h2, h3 {
 }
 
 li {
-    margin: 15px 0;
+    margin: 5px 0;
 }
 
 a:link.add, a:visited.add {
@@ -74,7 +74,7 @@ a:hover.add, a:active.add {
     color: white;
 }
 
-/*
+
 a[href^="skype:"] {
     padding-left: 20px !important;
     background: url(../img/skype.png) no-repeat center left;
@@ -98,4 +98,4 @@ a[href^="https://www.linkedin.com"] {
 a[href*="github."] {
     padding-left: 20px !important;
     background: url(../img/github.png) no-repeat center left;
-}*/
+}

@@ -33,7 +33,7 @@
             <h3>${type.title}</h3><br>
         <c:choose>
         <c:when test="${type=='PERSONAL' || type=='OBJECTIVE'}">
-    <li><%=section%></li>
+    <h4><%=section%></h4>
     <br>
     <hr>
     </c:when>
@@ -41,7 +41,6 @@
 
         <c:forEach var="item" items="<%=((ListSection) section).getList()%>">
             <li>${item}</li>
-            <br>
         </c:forEach>
         <hr>
     </c:when>
