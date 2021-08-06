@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ResumeServlet extends HttpServlet {
 
@@ -70,10 +71,17 @@ public class ResumeServlet extends HttpServlet {
                             }
                         }
                         case EDUCATION, EXPERIENCE -> {
-                            if (section == null) {
-                                section = new OrganizationSection(new Experience("", "",
-                                        new Experience.Position()));
+                            OrganizationSection orgSection = (OrganizationSection) section;
+                            ArrayList<Experience> organizations = new ArrayList<>();
+                            organizations.add(new Experience("", "", new Experience.Position()));
+                            if (orgSection != null) {
+                                for (Experience org : orgSection.getExperienceList()) {
+                                    List<Experience.Position> positions = new ArrayList<>(org.getPositionList());
+                                    positions.add(new Experience.Position());
+                                    organizations.add(new Experience(org.getLink(), positions));
+                                }
                             }
+                            section = new OrganizationSection(organizations);
                         }
                     }
                     resume.addSection(type, section);
