@@ -51,6 +51,10 @@ dt {
     width: 170px;
 }
 
+dt.bold {
+    font-weight: bolder;
+}
+
 dd {
     display: inline-block;
     margin-left: 8px;
