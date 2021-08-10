@@ -3,22 +3,32 @@ body {
 }
 
 table, th, td {
-    border: 1px solid black;
+    border: thin solid grey;
     border-collapse: collapse;
+}
+
+.org {
+    border: none;
 }
 
 th, td {
     padding: 5px;
 }
 
-div#photo{
-   position: absolute;
+div#photo {
+    position: absolute;
     right: 25%;
     top: 10%;
 }
 
 th, td:hover {
     background-color: lightblue;
+}
+
+hr{
+    border: 0;
+    height: 1px;
+    background: #333 linear-gradient(to right, #ccc, #333, #ccc);
 }
 
 header {
@@ -65,13 +75,19 @@ h2, h3 {
     margin: 15px 0 5px;
 }
 
+h4#personal {
+    padding-left: 20px !important;
+    background: url(../img/right-arrow.png) no-repeat center left;
+    background-size: 18px;
+    font-weight: normal;
+}
+
 li {
     margin: 5px 0;
 }
 
 a:link.add, a:visited.add {
     color: black;
-    border: 2px solid lightblue;
     padding: 15px 15px 15px 40px;
     text-align: center;
     text-decoration: none;
