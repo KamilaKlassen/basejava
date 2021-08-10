@@ -3,6 +3,8 @@ package com.basejava.webapp.web;
 import com.basejava.webapp.Config;
 import com.basejava.webapp.model.*;
 import com.basejava.webapp.storage.Storage;
+import com.basejava.webapp.util.DateUtil;
+import com.basejava.webapp.util.HtmlUtil;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -104,7 +106,7 @@ public class ResumeServlet extends HttpServlet {
         String fullName = request.getParameter("fullName");
         Resume resume;
 
-        if (uuid == null || uuid.length() == 0) {
+        if (HtmlUtil.isEmpty(uuid)) {
             resume = new Resume(fullName);
         } else {
             resume = storage.get(uuid);
@@ -113,7 +115,7 @@ public class ResumeServlet extends HttpServlet {
 
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
-            if (value != null && value.trim().length() != 0) {
+            if (HtmlUtil.isEmpty(value)) {
                 resume.addContact(type, value);
             } else {
                 resume.getContacts().remove(type);
@@ -122,25 +124,50 @@ public class ResumeServlet extends HttpServlet {
 
         for (SectionType sectionType : SectionType.values()) {
             String value = request.getParameter(sectionType.name());
-            if (value != null && value.trim().length() != 0) {
-                switch (sectionType.name()) {
-                    case "OBJECTIVE", "PERSONAL" -> resume.addSection(sectionType, new TextSection(value));
-                    case "ACHIEVEMENT", "QUALIFICATIONS" -> {
+            String[] values = request.getParameterValues(sectionType.name());
+            if (HtmlUtil.isEmpty(value) && values.length < 2) {
+                resume.getSections().remove(sectionType);
+            } else {
+                switch (sectionType) {
+                    case OBJECTIVE, PERSONAL -> resume.addSection(sectionType, new TextSection(value));
+                    case ACHIEVEMENT, QUALIFICATIONS -> {
                         String[] array = value.split("\n");
                         ArrayList<String> result = new ArrayList<>();
 
                         for (String str : array) {
-                            if (str != null && str.trim().length() != 0) {
+                            if (!HtmlUtil.isEmpty(str)) {
                                 result.add(str);
                             }
                         }
                         resume.addSection(sectionType, new ListSection(result));
                     }
+                    case EDUCATION, EXPERIENCE -> {
+                        List<Experience> orgs = new ArrayList<>();
+                        String[] urls = request.getParameterValues(sectionType.name() + "url");
+                        for (int i = 0; i < values.length; i++) {
+                            String name = values[i];
+                            if (!HtmlUtil.isEmpty(name)) {
+                                List<Experience.Position> positions = new ArrayList<>();
+                                String index = sectionType.name() + i;
+                                String[] startDates = request.getParameterValues(index + "startDate");
+                                String[] endDates = request.getParameterValues(index + "endDate");
+                                String[] titles = request.getParameterValues(index + "title");
+                                String[] descriptions = request.getParameterValues(index + "description");
+                                for (int j = 0; j < titles.length; j++) {
+                                    if (!HtmlUtil.isEmpty(titles[j])) {
+                                        positions.add(new Experience.Position(DateUtil.parse(startDates[j]), DateUtil.parse(endDates[j]), titles[j], descriptions[j]));
+                                    }
+                                }
+                                orgs.add(new Experience(new Link(name, urls[i]), positions));
+                            }
+                        }
+                        resume.addSection(sectionType, new OrganizationSection(orgs));
+                    }
                 }
             }
         }
 
-        if (uuid == null || uuid.length() == 0) {
+        if (HtmlUtil.isEmpty(uuid)) {
             storage.save(resume);
         } else {
             storage.update(resume);

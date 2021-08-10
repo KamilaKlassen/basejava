@@ -14,7 +14,7 @@ public class DateUtil {
     }
 
     public static LocalDate parse(String date) {
-        if (date != null && date.trim().length() != 0 || "Сейчас".equals(date)) return NOW;
+        if (HtmlUtil.isEmpty(date) || "Сейчас".equals(date)) return NOW;
         YearMonth yearMonth = YearMonth.parse(date, DATE_FORMATTER);
         return LocalDate.of(yearMonth.getYear(), yearMonth.getMonth(), 1);
     }
