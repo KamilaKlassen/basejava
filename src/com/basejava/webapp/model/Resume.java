@@ -19,6 +19,17 @@ public class Resume implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    public static final Resume EMPTY = new Resume();
+
+    static {
+        EMPTY.addSection(SectionType.OBJECTIVE, TextSection.EMPTY);
+        EMPTY.addSection(SectionType.PERSONAL, TextSection.EMPTY);
+        EMPTY.addSection(SectionType.ACHIEVEMENT, ListSection.EMPTY);
+        EMPTY.addSection(SectionType.QUALIFICATIONS, ListSection.EMPTY);
+        EMPTY.addSection(SectionType.EXPERIENCE, new OrganizationSection(Experience.EMPTY));
+        EMPTY.addSection(SectionType.EDUCATION, new OrganizationSection(Experience.EMPTY));
+    }
+
     // Unique identifier
     private String uuid;
     private String fullName;

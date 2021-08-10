@@ -44,19 +44,7 @@ public class ResumeServlet extends HttpServlet {
                 return;
             }
             case "view" -> resume = storage.get(uuid);
-            case "add" -> {
-                resume = new Resume();
-                resume.addContact(ContactType.MAIL, "");
-                resume.addContact(ContactType.SKYPE, "");
-                resume.addSection(SectionType.OBJECTIVE, new TextSection(""));
-                resume.addSection(SectionType.PERSONAL, new TextSection(""));
-                resume.addSection(SectionType.ACHIEVEMENT, new ListSection(""));
-                resume.addSection(SectionType.QUALIFICATIONS, new ListSection(""));
-                resume.addSection(SectionType.EDUCATION, new OrganizationSection(new Experience("", "",
-                        new Experience.Position())));
-                resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(new Experience("", "",
-                        new Experience.Position())));
-            }
+            case "add" -> resume = Resume.EMPTY;
             case "edit" -> {
                 resume = storage.get(uuid);
                 for (SectionType type : SectionType.values()) {
@@ -64,22 +52,22 @@ public class ResumeServlet extends HttpServlet {
                     switch (type) {
                         case OBJECTIVE, PERSONAL -> {
                             if (section == null) {
-                                section = new TextSection("");
+                                section = TextSection.EMPTY;
                             }
                         }
                         case ACHIEVEMENT, QUALIFICATIONS -> {
                             if (section == null) {
-                                section = new ListSection("");
+                                section = ListSection.EMPTY;
                             }
                         }
                         case EDUCATION, EXPERIENCE -> {
                             OrganizationSection orgSection = (OrganizationSection) section;
                             ArrayList<Experience> organizations = new ArrayList<>();
-                            organizations.add(new Experience("", "", new Experience.Position()));
+                            organizations.add(Experience.EMPTY);
                             if (orgSection != null) {
                                 for (Experience org : orgSection.getExperienceList()) {
                                     List<Experience.Position> positions = new ArrayList<>(org.getPositionList());
-                                    positions.add(new Experience.Position());
+                                    positions.add(Experience.Position.EMPTY);
                                     organizations.add(new Experience(org.getLink(), positions));
                                 }
                             }
