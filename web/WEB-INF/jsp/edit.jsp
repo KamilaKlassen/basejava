@@ -2,6 +2,7 @@
 <%@ page import="com.basejava.webapp.model.SectionType" %>
 <%@ page import="com.basejava.webapp.model.ListSection" %>
 <%@ page import="com.basejava.webapp.model.OrganizationSection" %>
+<%@ page import="com.basejava.webapp.util.DateUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -57,14 +58,16 @@
 
                         <%--Organisations--%>
                         <c:when test="${typeSection=='EXPERIENCE' || typeSection=='EDUCATION'}">
-                            <c:forEach var="org" items="<%=((OrganizationSection)section).getExperienceList()%>" varStatus="counter">
+                            <c:forEach var="org" items="<%=((OrganizationSection)section).getExperienceList()%>"
+                                       varStatus="counter">
                                 <dl>
                                     <dt>Название организации:</dt>
                                     <dd><input type="text" name="${typeSection}" size=75 value="${org.link.name}"></dd>
                                 </dl>
                                 <dl>
                                     <dt>Сайт организации:</dt>
-                                    <dd><input type="text" name="${typeSection}url" size=75 value="${org.link.url}"></dd>
+                                    <dd><input type="text" name="${typeSection}url" size=75 value="${org.link.url}">
+                                    </dd>
                                 </dl>
 
                                 <%--Positions--%>
@@ -73,19 +76,21 @@
                                     <dl>
                                         <dt>Дата начала работы:</dt>
                                         <dd>
-                                            <input type="date" name="${typeSection}${counter.index}startDate" size=10
-                                                   value="<%=pos.getStartDate()%>">
+                                            <input type="text" name="${typeSection}${counter.index}startDate" size=10
+                                                   value="<%=DateUtil.format(pos.getStartDate())%>"
+                                                   placeholder="MM/yyyy">
                                         </dd>
                                     </dl>
                                     <dl>
                                         <dt>Дата окончания работы:</dt>
                                         <dd>
-                                            <input type="date" name="${typeSection}${counter.index}endDate" size=10
-                                                   value="<%=pos.getEndDate()%>"></dd>
+                                            <input type="text" name="${typeSection}${counter.index}endDate" size=10
+                                                   value="<%=DateUtil.format(pos.getEndDate())%>" placeholder="MM/yyyy">
+                                        </dd>
                                     </dl>
                                     <dl>
                                         <dt>Должность в организации:</dt>
-                                        <dd><input type="text" name=${typeSection}${counter.index}position" size=75
+                                        <dd><input type="text" name="${typeSection}${counter.index}title" size=75
                                                    value="${pos.title}">
                                         </dd>
                                     </dl>
